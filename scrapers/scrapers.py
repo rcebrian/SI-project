@@ -7,12 +7,25 @@ import requests
 from bs4 import BeautifulSoup
 
 
+def article_exists(old, new):
+    with open(old, 'r') as f:
+        js = json.load(f)
+    if js['date'] == new['date'] and js['time'] == new['time']:
+        return True
+    else:
+        return False
+
+
 def store_data(directory, category, content):
     path = "../data/" + directory + "/" + category + "/"
     dates = []
 
+    exist = False
+
     for js in os.listdir(path):
         if content['date'] in js:
+            if article_exists(path+js, content):
+                exist = True
             dates.append(int(js.split('.')[-2]))
     if len(dates) is 0:
         a_id = 1
@@ -20,10 +33,13 @@ def store_data(directory, category, content):
         dates.sort()
         a_id = dates[-1] + 1
 
-    path = "../data/" + directory + "/" + category + "/" + category + "." + content['date'] + '.{0:0>3}'.format(
-        a_id) + ".json"
-    with open(path, 'w') as f:
-        json.dump(content, f, indent=4, ensure_ascii=False)
+    print(exist)
+    if not exist:
+        path = "../data/" + directory + "/" + category + "/" + category + "." + content['date'] + '.{0:0>3}'.format(
+            a_id) + ".json"
+        print('> Writing file: ', path)
+        with open(path, 'w') as f:
+            json.dump(content, f, indent=4, ensure_ascii=False)
 
 
 def scraper_elMundo(category):
@@ -115,17 +131,13 @@ def get_article(url):
 
 if __name__ == '__main__':
     article = {
-        'date': '2020-01-16',
-        'time': '01:46',
-    }
-    article2 = {
         'date': '2020-03-20',
-        'time': '10:59',
+        'time': '17:47',
     }
 
     # print(store_data('elMundo', 'tecnologia', article2))
 
-    # print(article_exists('../data/elMundo/tecnologia/tecnologia.2020-01-16.001.json', article))
+    # print(article_exists('../data/elMundo/tecnologia/tecnologia.2020-03-20.001.json', article))
     scraper_elMundo('tecnologia')
     # scraper_elPais('sanidad')
     # get_article('https://elpais.com/espana/madrid/2020-03-12/alcorcon-nuevo-foco-del-coranovirus-en-madrid.html')
