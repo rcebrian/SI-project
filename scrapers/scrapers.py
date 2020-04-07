@@ -1,14 +1,34 @@
 # -*- encoding: utf-8 -*-
 import json
+import os
 from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def scraper_elMundo(page):
-    if page is "ciencia" or page is "salud":
-        url = "https://www.elmundo.es/ciencia-y-salud/" + page
+def store_data(directory, category, content):
+    path = "../data/" + directory + "/" + category + "/"
+    dates = []
+
+    for js in os.listdir(path):
+        if content['date'] in js:
+            dates.append(int(js.split('.')[-2]))
+    if len(dates) is 0:
+        a_id = 1
+    else:
+        dates.sort()
+        a_id = dates[-1] + 1
+
+    path = "../data/" + directory + "/" + category + "/" + category + "." + content['date'] + '.{0:0>3}'.format(
+        a_id) + ".json"
+    with open(path, 'w') as f:
+        json.dump(content, f, indent=4, ensure_ascii=False)
+
+
+def scraper_elMundo(category):
+    if category is "ciencia" or category is "salud":
+        url = "https://www.elmundo.es/ciencia-y-salud/" + category
     else:
         url = "https://www.elmundo.es/tecnologia"
 
@@ -18,9 +38,7 @@ def scraper_elMundo(page):
     for article in soup.find_all('article'):
         for a in article.find_all('a'):
             hrefs = a['href'].split('/')
-            if 'ancla_comentarios' not in a['href'].split('#') \
-                    and 'promociones' not in hrefs \
-                    and 'album' not in hrefs:
+            if 'ancla_comentarios' not in a['href'].split('#') and 'promociones' not in hrefs and 'album' not in hrefs:
                 page_article = requests.get(a['href'])
                 soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
@@ -41,7 +59,73 @@ def scraper_elMundo(page):
                     'author': article_author,
                     'date': article_date,
                     'time': article_time,
-                    'content': article_content
+                    'content': article_content,
+                    'processed': None
                 }
+                store_data('elMundo', category, article_json)
 
-                print(json.dumps(article_json, indent=4, ensure_ascii=False))
+
+def scraper_elPais(category):
+    # switch category
+    if category is "tecnologia" or category is "ciencia":
+        url = "https://elpais.com/" + category + "/"
+    else:
+        url = "https://elpais.com/noticias/" + category + "/"
+
+    # get page response
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+
+    # get articles from category page
+    for article in soup.find_all('article', class_='story_card'):
+        for a in article.find_all('a'):
+            hrefs = a['href'].split('/')
+            if "autor" not in hrefs and "hemeroteca" not in hrefs:
+                print(a['href'])
+                get_article("https://elpais.com" + a['href'])
+
+
+def get_article(url):
+    page_article = requests.get(url)
+    soup_article = BeautifulSoup(page_article.content, features='html.parser')
+
+    article_content = ""
+    content = soup_article.find('section', class_='article_body')
+
+    try:
+        article_title = soup_article.find('h1').get_text()
+        article_subtitle = soup_article.find('h2').get_text()
+        article_author = soup_article.find('a', class_='color_black').get_text()
+        article_date = soup_article.find('div', class_='place_and_time').find('a')['href'].split('/')[-2]
+        article_time = \
+            soup_article.find('div', class_='place_and_time').find('a', recursive=False).get_text().split('-')[
+                -1].strip()  # todo: fix time error UTC+1
+
+        print('> TITLE    :', article_title)
+        print('> SUBTITLE :', article_subtitle)
+        print('> AUTHOR   :', article_author)
+        print('> DATE     :', article_date)
+        print('> TIME     :', article_time)
+
+        # for p_tag in content.find_all('p', recursive=False):
+        #     print(p_tag.get_text())
+    except:
+        pass
+
+
+if __name__ == '__main__':
+    article = {
+        'date': '2020-01-16',
+        'time': '01:46',
+    }
+    article2 = {
+        'date': '2020-03-20',
+        'time': '10:59',
+    }
+
+    # print(store_data('elMundo', 'tecnologia', article2))
+
+    # print(article_exists('../data/elMundo/tecnologia/tecnologia.2020-01-16.001.json', article))
+    scraper_elMundo('tecnologia')
+    # scraper_elPais('sanidad')
+    # get_article('https://elpais.com/espana/madrid/2020-03-12/alcorcon-nuevo-foco-del-coranovirus-en-madrid.html')
