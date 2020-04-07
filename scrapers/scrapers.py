@@ -24,7 +24,7 @@ def store_data(directory, category, content):
 
     for js in os.listdir(path):
         if content['date'] in js:
-            if article_exists(path+js, content):
+            if article_exists(path + js, content):
                 exist = True
             dates.append(int(js.split('.')[-2]))
     if len(dates) is 0:
@@ -88,6 +88,9 @@ def scraper_elPais(category):
     else:
         url = "https://elpais.com/noticias/" + category + "/"
 
+    if category is "sanidad":
+        category = "salud"
+
     # get page response
     page = requests.get(url)
     soup = BeautifulSoup(page.content, features='html.parser')
@@ -96,48 +99,48 @@ def scraper_elPais(category):
     for article in soup.find_all('article', class_='story_card'):
         for a in article.find_all('a'):
             hrefs = a['href'].split('/')
-            if "autor" not in hrefs and "hemeroteca" not in hrefs:
+            if "autor" not in hrefs and \
+                    "hemeroteca" not in hrefs and \
+                    "actualidad" not in hrefs and \
+                    "https:" not in hrefs and \
+                    "elpais" not in hrefs:  # remove video links
                 print(a['href'])
-                get_article("https://elpais.com" + a['href'])
+                page_article = requests.get("https://elpais.com" + a['href'])
+                soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
+                article_content = ""
+                content = soup_article.find('div', class_='article_body')
 
-def get_article(url):
-    page_article = requests.get(url)
-    soup_article = BeautifulSoup(page_article.content, features='html.parser')
+                article_title = soup_article.find('h1').get_text()
+                article_subtitle = soup_article.find('h2').get_text()
+                try:
+                    article_author = soup_article.find('a', class_='color_black').get_text()
+                except:
+                    article_author = soup_article.find('span',
+                                                       class_='margin_bottom uppercase flex align_items_center margin_right').get_text()
+                article_date = soup_article.find('div', class_='place_and_time').find('a')['href'].split('/')[-2]
+                article_time = \
+                    soup_article.find('div', class_='place_and_time').find('a', recursive=False).get_text().split('-')[
+                        -1].strip()  # todo: fix time error UTC+1
 
-    article_content = ""
-    content = soup_article.find('section', class_='article_body')
+                for p_tag in content.find_all('p', recursive=False):
+                    article_content = p_tag.get_text()
 
-    try:
-        article_title = soup_article.find('h1').get_text()
-        article_subtitle = soup_article.find('h2').get_text()
-        article_author = soup_article.find('a', class_='color_black').get_text()
-        article_date = soup_article.find('div', class_='place_and_time').find('a')['href'].split('/')[-2]
-        article_time = \
-            soup_article.find('div', class_='place_and_time').find('a', recursive=False).get_text().split('-')[
-                -1].strip()  # todo: fix time error UTC+1
-
-        print('> TITLE    :', article_title)
-        print('> SUBTITLE :', article_subtitle)
-        print('> AUTHOR   :', article_author)
-        print('> DATE     :', article_date)
-        print('> TIME     :', article_time)
-
-        # for p_tag in content.find_all('p', recursive=False):
-        #     print(p_tag.get_text())
-    except:
-        pass
+                article_json = {
+                    'title': article_title,
+                    'subtitle': article_subtitle,
+                    'author': article_author,
+                    'date': article_date,
+                    'time': article_time,
+                    'content': article_content,
+                    'processed': None
+                }
+                store_data('elPais', category, article_json)
+                # print(json.dumps(article_json, indent=4, ensure_ascii=False))
 
 
 if __name__ == '__main__':
-    article = {
-        'date': '2020-03-20',
-        'time': '17:47',
-    }
-
-    # print(store_data('elMundo', 'tecnologia', article2))
-
-    # print(article_exists('../data/elMundo/tecnologia/tecnologia.2020-03-20.001.json', article))
-    scraper_elMundo('tecnologia')
+    # scraper_elMundo('ciencia')
+    scraper_elPais('ciencia')
     # scraper_elPais('sanidad')
-    # get_article('https://elpais.com/espana/madrid/2020-03-12/alcorcon-nuevo-foco-del-coranovirus-en-madrid.html')
+    # scraper_elPais('tecnologia')
