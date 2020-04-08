@@ -136,11 +136,63 @@ def scraper_elPais(category):
                     'processed': None
                 }
                 store_data('elPais', category, article_json)
-                # print(json.dumps(article_json, indent=4, ensure_ascii=False))
+
+
+def scraper_20minutos(category):
+    # switch category
+    url = "https://20minutos.es/" + category + "/"
+
+    # get page response
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+
+    links = []
+
+    # get articles from category page
+    for article in soup.find_all('article', class_='media'):
+        for a in article.find_all('a'):
+            if a['href'] not in links and \
+                    "noticia" in a['href'] and \
+                    "#" not in a['href'] and \
+                    "4220544" not in a['href'] and \
+                    a['href'][0] is not "/":
+                links.append(a['href'])
+                page_article = requests.get(a['href'])
+                soup_article = BeautifulSoup(page_article.content, features='html.parser')
+
+                article_title = soup_article.find_all('h1')[-1].get_text()
+                try:
+                    article_subtitle = soup_article.find('div', class_='article-intro').find('li').get_text()
+                except:
+                    article_subtitle = soup_article.find('div', class_='article-intro').get_text()
+                article_author = soup_article.find('span', class_='article-author').find('strong').get_text()
+
+                article_datetime = soup_article.find('span', class_='article-date').find('a').get_text()
+                article_date = datetime.strptime(article_datetime, "%d.%m.%Y - %H:%Mh").strftime('%Y-%m-%d')
+                article_time = datetime.strptime(article_datetime, "%d.%m.%Y - %H:%Mh").strftime('%H:%M')
+
+                article_content = ""
+                content = soup_article.find('div', class_='article-text')
+                for p_tag in content.find_all('p', class_='paragraph', recursive=False):
+                    article_content += p_tag.get_text()
+
+                article_json = {
+                    'title': article_title,
+                    'subtitle': article_subtitle,
+                    'author': article_author,
+                    'date': article_date,
+                    'time': article_time,
+                    'content': article_content,
+                    'processed': None
+                }
+                store_data('20Minutos', category, article_json)
 
 
 if __name__ == '__main__':
     # scraper_elMundo('ciencia')
-    scraper_elPais('ciencia')
+    # scraper_elPais('ciencia')
     # scraper_elPais('sanidad')
     # scraper_elPais('tecnologia')
+    # scraper_20minutos('salud')
+    # scraper_20minutos('ciencia')
+    scraper_20minutos('tecnologia')
