@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>910</width>
+    <height>512</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>910</width>
+    <height>512</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Lexical Analysis</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_10">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_search">
+       <attribute name="title">
+        <string>Search</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QGroupBox" name="gb_options">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Options</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <layout class="QGridLayout" name="GL_options">
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="HL_search">
+               <item>
+                <widget class="QLabel" name="lbl_query">
+                 <property name="text">
+                  <string>Query</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="tf_search"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btn_search">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Search</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="0">
+              <layout class="QHBoxLayout" name="HL_opt">
+               <item>
+                <widget class="QLabel" name="lbl_top">
+                 <property name="text">
+                  <string>Top N</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="cb_top">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Minimum</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>300</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="lbl_filter">
+                 <property name="text">
+                  <string>Filter</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="cb_filter">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Minimum</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>300</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btn_make_analysis">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Make Analysis</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="HL_bottom">
+          <item>
+           <widget class="QGroupBox" name="gb_ranking">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Ranking</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QScrollArea" name="scroll_rank">
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="scroll_rank_items">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>405</width>
+                  <height>290</height>
+                 </rect>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="gb_article">
+            <property name="title">
+             <string>Article</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QScrollArea" name="scroll_article">
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="scroll_article_items">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>405</width>
+                  <height>290</height>
+                 </rect>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_compare">
+       <attribute name="title">
+        <string>Compare</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QGroupBox" name="gb_references">
+          <property name="title">
+           <string>Reference</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <layout class="QHBoxLayout" name="HL_search_2">
+                 <item>
+                  <widget class="QLabel" name="lbl_ref_source">
+                   <property name="text">
+                    <string>Source</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cb_ref_source"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QLabel" name="lbl_ref_cat">
+                   <property name="text">
+                    <string>Category</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cb_ref_cat"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QLabel" name="lbl_ref_top">
+                   <property name="text">
+                    <string>Top N</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cb_ref_top"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btn_ref_search">
+                 <property name="text">
+                  <string>Search</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="VL_ref_articles">
+               <item>
+                <widget class="QLabel" name="lbl_prev_articles">
+                 <property name="text">
+                  <string>Articles</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QScrollArea" name="scroll_ref_articles">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scroll_ref_articles_items">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>251</width>
+                    <height>160</height>
+                   </rect>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_ref_preview">
+             <property name="text">
+              <string>Preview</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QScrollArea" name="scroll_ref_preview">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scroll_ref_preview_items">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>406</width>
+                <height>185</height>
+               </rect>
+              </property>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_results">
+          <property name="title">
+           <string>Results</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <layout class="QHBoxLayout" name="HL_results">
+             <item>
+              <widget class="QLabel" name="lbl_res_source">
+               <property name="text">
+                <string>Source</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="cb_res_source"/>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="VL_res_rank">
+               <item>
+                <widget class="QLabel" name="lbl_res_rank">
+                 <property name="text">
+                  <string>Ranking</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QScrollArea" name="scroll_res_rank">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scroll_res_rank_items">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>270</width>
+                    <height>160</height>
+                   </rect>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_result_article">
+             <property name="text">
+              <string>Article</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="HL_articles">
+             <item>
+              <layout class="QVBoxLayout" name="VL_articles">
+               <item>
+                <widget class="QScrollArea" name="scroll_res_article">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scroll_res_article_items">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>402</width>
+                    <height>181</height>
+                   </rect>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
