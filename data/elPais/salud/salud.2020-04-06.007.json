@@ -5,5 +5,19 @@
     "date": "2020-04-06",
     "time": "14:41 UTC",
     "content": "El dato de fallecidos diario ha vuelto a registrar un descenso. Es seguro que estamos en la meseta y es posible, quizás, que estemos en proceso de abandonarla. ¿Pero podemos dar eso por seguro con los datos disponibles?",
-    "processed": null
+    "processed": [
+        "dat",
+        "fallec",
+        "diari",
+        "vuelt",
+        "registr",
+        "descens",
+        "segur",
+        "meset",
+        "proces",
+        "abandon",
+        "segur",
+        "dat",
+        "dispon"
+    ]
 }

@@ -5,5 +5,31 @@
     "date": "2020-03-31",
     "time": "17:45 UTC",
     "content": "En Estados Unidos, el Gobierno federal usa ya datos de GPS para observar movimientos en 500 ciudades del país. Según la noticia avanzada por The Wall Street Journal, el Gobierno optó por estos datos, que proceden de empresas de publicidad para móviles, en lugar de datos de operadoras, porque están menos regulados.",
-    "processed": null
+    "processed": [
+        "unid",
+        "gobiern",
+        "federal",
+        "dat",
+        "gps",
+        "observ",
+        "movimient",
+        "ciudad",
+        "pais",
+        "notici",
+        "avanz",
+        "the",
+        "wall",
+        "street",
+        "journal",
+        "gobiern",
+        "opto",
+        "dat",
+        "proced",
+        "empres",
+        "public",
+        "movil",
+        "dat",
+        "oper",
+        "regul"
+    ]
 }

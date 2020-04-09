@@ -5,5 +5,11 @@
     "date": "2020-04-07",
     "time": "14:42 UTC",
     "content": "- Pinche aquí para suscribirse a la newsletter diaria sobre la pandemia",
-    "processed": null
+    "processed": [
+        "pinch",
+        "suscrib",
+        "newslett",
+        "diari",
+        "pandemi"
+    ]
 }

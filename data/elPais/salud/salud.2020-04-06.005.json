@@ -5,5 +5,13 @@
     "date": "2020-04-06",
     "time": "20:20 UTC",
     "content": "- En caso de tener síntomas, estos son los teléfonos que se han habilitado en cada país de América Latina.",
-    "processed": null
+    "processed": [
+        "cas",
+        "sintom",
+        "telefon",
+        "habilit",
+        "pais",
+        "amer",
+        "latin"
+    ]
 }

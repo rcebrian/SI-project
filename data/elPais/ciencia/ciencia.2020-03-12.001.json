@@ -5,5 +5,10 @@
     "date": "2020-03-12",
     "time": "23:30 UTC",
     "content": "Coordinación y redacción: Victoria Toro",
-    "processed": null
+    "processed": [
+        "coordin",
+        "redaccion",
+        "victori",
+        "tor"
+    ]
 }
