@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets
 from analysis import utils as la
 from mainwindow import Ui_MainWindow
 from scrapers import scrapers as scr
+from files import utils as jsonutils
 
 
 class MainController(QtWidgets.QMainWindow):
@@ -15,13 +16,14 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.btn_make_analysis.clicked.connect(la.pre_process_all_files)  # btn to tokenize all files
 
-        # Tab scrapers
+        # scrapers TAB
         self.ui.btn_scrapers_20m_run.clicked.connect(self.scraper_20m)
         self.ui.btn_scrapers_elPais_run.clicked.connect(self.scraper_elPais)
         self.ui.btn_scrapers_elMundo_run.clicked.connect(self.scraper_elMundo)
         self.ui.btn_scrapers_run_all.clicked.connect(self.scraper_run_all)
         self.ui.btn_scrapers_refresh_sta.clicked.connect(self.refresh)
         self.ui.btn_scrapers_refresh_sta.clicked
+        self.refresh()
 
     def get_categories(self, opt):
         categories = []
@@ -55,25 +57,25 @@ class MainController(QtWidgets.QMainWindow):
         self.scraper_elPais()
 
     def refresh(self):
-        self.ui.lbl_scrapers_20m_health_result.setNum(scr.count_files('20Minutos', 'salud'))
-        self.ui.lbl_scrapers_20m_science_result.setNum(scr.count_files('20Minutos', 'ciencia'))
-        self.ui.lbl_scrapers_20m_tech_result.setNum(scr.count_files('20Minutos', 'tecnologia'))
+        self.ui.lbl_scrapers_20m_health_result.setNum(jsonutils.count_files('20Minutos', 'salud'))
+        self.ui.lbl_scrapers_20m_science_result.setNum(jsonutils.count_files('20Minutos', 'ciencia'))
+        self.ui.lbl_scrapers_20m_tech_result.setNum(jsonutils.count_files('20Minutos', 'tecnologia'))
         self.ui.lbl_scrapers_20m_total_result.setNum(
             int(self.ui.lbl_scrapers_20m_health_result.text()) +
             int(self.ui.lbl_scrapers_20m_science_result.text()) +
             int(self.ui.lbl_scrapers_20m_tech_result.text()))
 
-        self.ui.lbl_scrapers_elMundo_health_result.setNum(scr.count_files('elMundo', 'salud'))
-        self.ui.lbl_scrapers_elMundo_science_result.setNum(scr.count_files('elMundo', 'ciencia'))
-        self.ui.lbl_scrapers_elMundo_tech_result.setNum(scr.count_files('elMundo', 'tecnologia'))
+        self.ui.lbl_scrapers_elMundo_health_result.setNum(jsonutils.count_files('elMundo', 'salud'))
+        self.ui.lbl_scrapers_elMundo_science_result.setNum(jsonutils.count_files('elMundo', 'ciencia'))
+        self.ui.lbl_scrapers_elMundo_tech_result.setNum(jsonutils.count_files('elMundo', 'tecnologia'))
         self.ui.lbl_scrapers_elMundo_total_result.setNum(
             int(self.ui.lbl_scrapers_elMundo_health_result.text()) +
             int(self.ui.lbl_scrapers_elMundo_science_result.text()) +
             int(self.ui.lbl_scrapers_elMundo_tech_result.text()))
 
-        self.ui.lbl_scrapers_elPais_health_result.setNum(scr.count_files('elPais', 'salud'))
-        self.ui.lbl_scrapers_elPais_science_result.setNum(scr.count_files('elPais', 'ciencia'))
-        self.ui.lbl_scrapers_elPais_tech_result.setNum(scr.count_files('elPais', 'tecnologia'))
+        self.ui.lbl_scrapers_elPais_health_result.setNum(jsonutils.count_files('elPais', 'salud'))
+        self.ui.lbl_scrapers_elPais_science_result.setNum(jsonutils.count_files('elPais', 'ciencia'))
+        self.ui.lbl_scrapers_elPais_tech_result.setNum(jsonutils.count_files('elPais', 'tecnologia'))
         self.ui.lbl_scrapers_elPais_total_result.setNum(
             int(self.ui.lbl_scrapers_elPais_health_result.text()) +
             int(self.ui.lbl_scrapers_elPais_science_result.text()) +

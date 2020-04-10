@@ -200,7 +200,3 @@ def scraper_20minutos(categories):
                         'processed': None
                     }
                     store_data('20Minutos', category, article_json)
-
-
-def count_files(source, category):
-    return len(os.listdir('./data/' + source + '/' + category))
