@@ -120,7 +120,7 @@ def cosine_formula(df_tf_idf, df_tf_idf_query):
         sum_query = sum_query + pow(df_tf_idf_query['values'][j], 2)
 
     denominator = math.sqrt(sum_file) * math.sqrt(sum_query)
-    if denominator is 0:
+    if denominator == 0:
         return 0
     else:
         return numerator / denominator
@@ -136,6 +136,9 @@ def query_similarity(sources, categories, total_idf, query_tf_idf, top):
     for i in range(len(query_tf_idf)):
         if query_tf_idf['words'][i] in total_idf['words'].values:
             df_idf1 = df_idf1.append(total_idf[total_idf['words'] == query_tf_idf['words'][i]])
+            # cambio de la Jazi
+            df_idf1.reset_index(inplace=True)
+            del df_idf1['index']
         else:
             df_idf1.loc[i] = [query_tf_idf['words'][i], 0]
     df_idf1.reset_index(inplace=True)
@@ -161,6 +164,9 @@ def query_similarity(sources, categories, total_idf, query_tf_idf, top):
         for i in range(len(query_tf_idf)):
             if query_tf_idf['words'][i] in tf['words'].values:
                 df_tf = df_tf.append(tf[tf['words'] == query_tf_idf['words'][i]])
+                # cambio de la Jazi
+                df_tf.reset_index(inplace=True)
+                del df_tf['index']
             else:
                 df_tf.loc[i] = [query_tf_idf['words'][i], 0]
         df_tf.reset_index(inplace=True)
