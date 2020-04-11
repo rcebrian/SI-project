@@ -46,6 +46,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.table_compare_ref_articles.itemClicked.connect(self.tab_compare_write_article)
         self.ui.table_compare_ref_rank.itemClicked.connect(self.write_article_ref_rank)
         self.ui.btn_ref_search.clicked.connect(self.compare_articles)
+        self.select_categories(0)
 
     def create_alert_window(self, title, content):
         QMessageBox.about(self, title, content)
@@ -210,7 +211,7 @@ class MainController(QtWidgets.QMainWindow):
         self.set_results_ranking_table()
 
     def write_article_ref_rank(self, index):
-        self.write_article(self.ui.tx_search_article_result, self.df_compare['file'][index.row()])
+        self.write_article(self.ui.tx_compare_article, self.df_compare['file'][index.row()])
 
 
 def run():
