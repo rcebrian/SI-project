@@ -26,6 +26,12 @@
    <layout class="QVBoxLayout" name="verticalLayout_10">
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="accessibleName">
        <string/>
       </property>
@@ -529,34 +535,6 @@
              </item>
              <item>
               <layout class="QGridLayout" name="gridLayout">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label">
-                 <property name="text">
-                  <string>Health</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_2">
-                 <property name="text">
-                  <string>Science</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1" alignment="Qt::AlignHCenter">
-                <widget class="QLabel" name="lbl_scrapers_20m_health_result">
-                 <property name="text">
-                  <string>0</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_3">
-                 <property name="text">
-                  <string>Technology</string>
-                 </property>
-                </widget>
-               </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="label_5">
                  <property name="text">
@@ -571,10 +549,10 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1" alignment="Qt::AlignHCenter">
-                <widget class="QLabel" name="lbl_scrapers_20m_tech_result">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_2">
                  <property name="text">
-                  <string>0</string>
+                  <string>Science</string>
                  </property>
                 </widget>
                </item>
@@ -582,6 +560,34 @@
                 <widget class="QLabel" name="lbl_scrapers_20m_total_result">
                  <property name="text">
                   <string>0</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1" alignment="Qt::AlignHCenter">
+                <widget class="QLabel" name="lbl_scrapers_20m_tech_result">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>Health</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1" alignment="Qt::AlignHCenter">
+                <widget class="QLabel" name="lbl_scrapers_20m_health_result">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>Technology</string>
                  </property>
                 </widget>
                </item>
@@ -669,6 +675,12 @@
                  </item>
                  <item>
                   <widget class="QComboBox" name="cb_ref_cat">
+                   <property name="minimumSize">
+                    <size>
+                     <width>50</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                    <item>
                     <property name="text">
                      <string>All Categories</string>
@@ -693,8 +705,131 @@
                  </item>
                 </layout>
                </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="VL_ref_articles">
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <widget class="QLabel" name="lbl_prev_articles">
+                 <property name="text">
+                  <string>Articles</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QScrollArea" name="scroll_ref_articles">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scroll_ref_articles_items">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>372</width>
+                    <height>254</height>
+                   </rect>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_2">
+                   <item>
+                    <widget class="QTableWidget" name="table_compare_ref_articles">
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QAbstractScrollArea::AdjustToContents</enum>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <property name="showGrid">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_ref_preview">
+             <property name="text">
+              <string>Preview</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="tx_compare_preview"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_results">
+          <property name="title">
+           <string>Results</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <layout class="QHBoxLayout" name="HL_results">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_22">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QLabel" name="lbl_res_source">
+                   <property name="text">
+                    <string>Source</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cb_res_source">
+                   <item>
+                    <property name="text">
+                     <string>All Sources</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>20 Minutos</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>El Mundo</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>El Pais</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
                  <item>
                   <widget class="QLabel" name="lbl_ref_top">
                    <property name="text">
@@ -703,7 +838,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="cb_ref_top">
+                  <widget class="QComboBox" name="cb_res_top">
                    <item>
                     <property name="text">
                      <string>Select</string>
@@ -748,93 +883,6 @@
               </layout>
              </item>
              <item>
-              <layout class="QVBoxLayout" name="VL_ref_articles">
-               <item>
-                <widget class="QLabel" name="lbl_prev_articles">
-                 <property name="text">
-                  <string>Articles</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QScrollArea" name="scroll_ref_articles">
-                 <property name="widgetResizable">
-                  <bool>true</bool>
-                 </property>
-                 <widget class="QWidget" name="scroll_ref_articles_items">
-                  <property name="geometry">
-                   <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>372</width>
-                    <height>254</height>
-                   </rect>
-                  </property>
-                  <layout class="QHBoxLayout" name="horizontalLayout_2">
-                   <item>
-                    <widget class="QTableWidget" name="table_compare_ref_articles"/>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="lbl_ref_preview">
-             <property name="text">
-              <string>Preview</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="tx_compare_preview"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="gb_results">
-          <property name="title">
-           <string>Results</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item>
-            <layout class="QHBoxLayout" name="HL_results">
-             <item>
-              <widget class="QLabel" name="lbl_res_source">
-               <property name="text">
-                <string>Source</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cb_res_source">
-               <item>
-                <property name="text">
-                 <string>All Categories</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>20 Minutos</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>El Mundo</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>El Pais</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
               <layout class="QVBoxLayout" name="VL_res_rank">
                <item>
                 <widget class="QLabel" name="lbl_res_rank">
@@ -853,13 +901,41 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>390</width>
+                    <width>386</width>
                     <height>254</height>
                    </rect>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_12">
                    <item>
-                    <widget class="QTableWidget" name="table_compare_ref_rank"/>
+                    <widget class="QTableWidget" name="table_compare_ref_rank">
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QAbstractScrollArea::AdjustToContents</enum>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <property name="showGrid">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                    </widget>
                    </item>
                   </layout>
                  </widget>
