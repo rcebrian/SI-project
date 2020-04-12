@@ -54,29 +54,27 @@ def scraper_elMundo(categories):
 
         for article in soup.find_all('article'):
             for a in article.find_all('a'):
-                hrefs = a['href'].split('/')
-                if 'ancla_comentarios' not in a['href'].split(
-                        '#') and 'promociones' not in hrefs and 'album' not in hrefs:
+                if 'ancla_comentarios' not in a['href'] and \
+                        'promociones' not in a['href'] and \
+                        'album' not in a['href'] and \
+                        '.html' in a['href']:
                     page_article = requests.get(a['href'])
                     soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
-                    article_title = soup_article.find('h1').get_text()
-                    article_subtitle = soup_article.find('p', class_='ue-c-article__standfirst').get_text()
-                    article_author = soup_article.find('div', class_='ue-c-article__byline-name').get_text()
+                    print(a['href'])
+
                     article_datetime = soup_article.find('time')['datetime']
-                    article_date = datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%Y-%m-%d')
-                    article_time = datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%H:%M')
                     article_content = ""
                     content = soup_article.find('div', class_='ue-l-article__body ue-c-article__body')
                     for p_tag in content.find_all('p', recursive=False):
-                        article_content += p_tag.get_text()
+                        article_content += p_tag.get_text() + "\n"
 
                     article_json = {
-                        'title': article_title,
-                        'subtitle': article_subtitle,
-                        'author': article_author,
-                        'date': article_date,
-                        'time': article_time,
+                        'title': soup_article.find('h1').get_text(),
+                        'subtitle': soup_article.find('p', class_='ue-c-article__standfirst').get_text(),
+                        'author': soup_article.find('div', class_='ue-c-article__byline-name').get_text(),
+                        'date': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%Y-%m-%d'),
+                        'time': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%H:%M'),
                         'content': article_content,
                         'processed': None
                     }
