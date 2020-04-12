@@ -100,7 +100,6 @@ def scraper_elPais(categories):
                 if "https" not in a['href'] and \
                         "album" not in a['href'] and \
                         "hemeroteca" not in a['href']:
-                    print(a['href'])
                     page_article = requests.get("https://elpais.com" + a['href'])
                     soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
