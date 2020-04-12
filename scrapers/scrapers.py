@@ -61,8 +61,6 @@ def scraper_elMundo(categories):
                     page_article = requests.get(a['href'])
                     soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
-                    print(a['href'])
-
                     article_datetime = soup_article.find('time')['datetime']
                     article_content = ""
                     content = soup_article.find('div', class_='ue-l-article__body ue-c-article__body')
