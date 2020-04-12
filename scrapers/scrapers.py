@@ -145,44 +145,50 @@ def scraper_20minutos(categories):
         # get page response
         page = requests.get(url)
         soup = BeautifulSoup(page.content, features='html.parser')
-
         links = []
 
         # get articles from category page
         for article in soup.find_all('article', class_='media'):
             for a in article.find_all('a'):
                 if a['href'] not in links and \
+                        "https" in a['href'] and \
                         "noticia" in a['href'] and \
-                        "#" not in a['href'] and \
+                        "4203956" not in a['href'] and \
                         "4220544" not in a['href'] and \
                         "4222535" not in a['href'] and \
-                        a['href'][0] is not "/" and \
-                        a['href'][0] is not "2":
-                    links.append(a['href'])
+                        "undefined" not in a['href']:
+                    links.append(a['href'])  # saved to avoid duplicates
                     page_article = requests.get(a['href'])
                     soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
-                    article_title = soup_article.find_all('h1')[-1].get_text()
+                    # subtitle
                     try:
                         article_subtitle = soup_article.find('div', class_='article-intro').find('li').get_text()
                     except:
-                        try:
-                            article_subtitle = soup_article.find('div', class_='article-intro').get_text()
-                        except:
-                            article_subtitle = None
-                    article_author = soup_article.find('span', class_='article-author').find('strong').get_text()
+                        article_subtitle = None
 
-                    article_datetime = soup_article.find('span', class_='article-date').find('a').get_text()
-                    article_date = datetime.strptime(article_datetime, "%d.%m.%Y - %H:%Mh").strftime('%Y-%m-%d')
-                    article_time = datetime.strptime(article_datetime, "%d.%m.%Y - %H:%Mh").strftime('%H:%M')
+                    # author
+                    try:
+                        article_author = soup_article.find('span', class_='article-author').find('strong').get_text()
+                    except:
+                        article_author = None
+
+                    # date
+                    try:
+                        article_datetime = soup_article.find('span', class_='article-date').find('a').get_text()
+                        article_date = datetime.strptime(article_datetime, "%d.%m.%Y - %H:%Mh").strftime('%Y-%m-%d')
+                        article_time = datetime.strptime(article_datetime, "%d.%m.%Y - %H:%Mh").strftime('%H:%M')
+                    except:
+                        article_date = None
+                        article_time = None
 
                     article_content = ""
                     content = soup_article.find('div', class_='article-text')
                     for p_tag in content.find_all('p', class_='paragraph', recursive=False):
-                        article_content += p_tag.get_text()
+                        article_content += p_tag.get_text() + "\n"
 
                     article_json = {
-                        'title': article_title,
+                        'title': soup_article.find('h1').get_text(),
                         'subtitle': article_subtitle,
                         'author': article_author,
                         'date': article_date,
