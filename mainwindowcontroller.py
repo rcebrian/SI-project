@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import os
 
 import pandas as pd
@@ -18,15 +20,14 @@ class MainController(QtWidgets.QMainWindow):
         super(MainController, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.btn_make_analysis.clicked.connect(la.pre_process_all_files)  # btn to tokenize all files
-        self.df = pd.DataFrame(columns=['file', 'similarity'])
+        self.df_search = pd.DataFrame(columns=['file', 'similarity'])
         self.df_compare = pd.DataFrame(columns=['file', 'similarity'])
         self.CATEGORIES = ['ciencia', 'salud', 'tecnologia']
         self.SOURCES = ['20Minutos', 'elMundo', 'elPais']
         self.selected_file = ""
 
         # analysis TAB
-        self.ui.btn_search.clicked.connect(self.make_search)
+        self.ui.btn_search.clicked.connect(self.tab_search_results)
         self.ui.table_search_rank.itemClicked.connect(self.write_article_rank)
         # todo remove
         self.ui.tf_search.setText(
@@ -38,6 +39,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.btn_scrapers_elMundo_run.clicked.connect(self.scraper_elMundo)
         self.ui.btn_scrapers_run_all.clicked.connect(self.scraper_run_all)
         self.ui.btn_scrapers_refresh_sta.clicked.connect(self.refresh)
+        self.ui.btn_make_analysis.clicked.connect(la.pre_process_all_files)  # btn to tokenize all files
         self.refresh()
 
         # compare TAB
@@ -45,7 +47,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.cb_ref_cat.currentIndexChanged.connect(self.select_categories)
         self.ui.table_compare_ref_articles.itemClicked.connect(self.tab_compare_write_article)
         self.ui.table_compare_ref_rank.itemClicked.connect(self.write_article_ref_rank)
-        self.ui.btn_ref_search.clicked.connect(self.compare_articles)
+        self.ui.btn_ref_search.clicked.connect(self.tab_compare_results)
         self.select_categories(0)
 
     def create_alert_window(self, title, content):
@@ -86,26 +88,32 @@ class MainController(QtWidgets.QMainWindow):
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # SEARCH TAB # # # # # # # # # # # # # # # # # # # # # # # # # # #
     def write_article_rank(self, index):
-        self.write_article(self.ui.tx_search_article_result, self.df['file'][index.row()])
+        self.write_article(self.ui.tx_search_article_result, self.df_search['file'][index.row()])
 
-    def set_ranking_table(self):
-        rows = len(self.df)
-        self.ui.table_search_rank.setRowCount(rows)
-        self.ui.table_search_rank.setColumnCount(1)
-        for row in range(rows):
-            item = QTableWidgetItem(self.df['file'][row][7:-5] + '     -     SIMILARITY ' + str(
-                round(self.df['similarity'][row] * 100, 2)) + '%')
-            self.ui.table_search_rank.setItem(row, 0, item)
-        self.create_alert_window("Finish", "The process has finished")
-
-    def make_search(self):
+    def make_analysis(self, df, table, sources, categories, query, top):
         self.create_alert_window("Processing", "Please wait for the process to finish")
+        df = la.query_similarity(sources, categories, la.total_idf(sources, categories), la.get_query_tf_idf(query),
+                                 top)
+        rows = len(df)
+        table.setRowCount(rows)
+        table.setColumnCount(1)
+        for row in range(rows):
+            item = QTableWidgetItem(
+                df['file'][row][7:-5] + '     -     SIMILARITY ' + str(round(df['similarity'][row] * 100, 2)) + '%')
+            table.setItem(row, 0, item)
+        self.create_alert_window("Finish", "The process has finished")
+        return df
+
+    def tab_search_results(self):
         top = self.ui.cb_top.currentIndex()
-        filter = self.get_sources(self.ui.cb_filter.currentIndex())
+        sources = self.get_sources(self.ui.cb_filter.currentIndex())
         query = self.ui.tf_search.text()
-        self.df = la.query_similarity(filter, self.CATEGORIES, la.total_idf(filter, self.CATEGORIES),
-                                      la.get_query_tf_idf(query), top)
-        self.set_ranking_table()
+        self.df_search = self.make_analysis(df=self.df_search,
+                                            table=self.ui.table_search_rank,
+                                            sources=sources,
+                                            categories=self.CATEGORIES,
+                                            query=query,
+                                            top=top)
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # SCRAPERS TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
     def scraper_20m(self):
@@ -190,25 +198,17 @@ class MainController(QtWidgets.QMainWindow):
         self.selected_file = './data/' + str(self.ui.table_compare_ref_articles.currentItem().text()) + '.json'
         self.write_article(self.ui.tx_compare_preview, self.selected_file)
 
-    def set_results_ranking_table(self):
-        rows = len(self.df_compare)
-        self.ui.table_compare_ref_rank.setRowCount(rows)
-        self.ui.table_compare_ref_rank.setColumnCount(1)
-        for row in range(rows):
-            item = QTableWidgetItem(self.df_compare['file'][row][7:-5] + '     -     SIMILARITY ' + str(
-                round(self.df_compare['similarity'][row] * 100, 2)) + '%')
-            self.ui.table_compare_ref_rank.setItem(row, 0, item)
-        self.create_alert_window("Finish", "The process has finished")
-
-    def compare_articles(self):
-        self.create_alert_window("Processing", "Please wait for the process to finish")
+    def tab_compare_results(self):
         sources = self.get_sources(self.ui.cb_res_source.currentIndex())
         top = self.ui.cb_res_top.currentIndex()
-
         query = jsutils.read_json(self.selected_file)['content']
-        self.df_compare = la.query_similarity(sources, self.CATEGORIES, la.total_idf(sources, self.CATEGORIES),
-                                              la.get_query_tf_idf(query), top)
-        self.set_results_ranking_table()
+
+        self.df_compare = self.make_analysis(df=self.df_compare,
+                                             table=self.ui.table_compare_ref_rank,
+                                             sources=sources,
+                                             categories=self.CATEGORIES,
+                                             query=query,
+                                             top=top)
 
     def write_article_ref_rank(self, index):
         self.write_article(self.ui.tx_compare_article, self.df_compare['file'][index.row()])
