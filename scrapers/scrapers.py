@@ -99,44 +99,35 @@ def scraper_elPais(categories):
         page = requests.get(url)
         soup = BeautifulSoup(page.content, features='html.parser')
 
-        # get articles from category page
         for article in soup.find_all('article', class_='story_card'):
             for a in article.find_all('a'):
-                hrefs = a['href'].split('/')
-                if "autor" not in hrefs and \
-                        "hemeroteca" not in hrefs and \
-                        "actualidad" not in hrefs and \
-                        "https:" not in hrefs and \
-                        "elpais" not in hrefs:  # remove video links
+                if "https" not in a['href'] and \
+                        "album" not in a['href'] and \
+                        "hemeroteca" not in a['href']:
+                    print(a['href'])
                     page_article = requests.get("https://elpais.com" + a['href'])
                     soup_article = BeautifulSoup(page_article.content, features='html.parser')
 
-                    article_content = ""
-                    content = soup_article.find('div', class_='article_body')
-
-                    article_title = soup_article.find('h1').get_text()
-                    article_subtitle = soup_article.find('h2').get_text()
                     try:
-                        article_author = soup_article.find('a', class_='color_black').get_text()
-                    except:
-                        try:
-                            article_author = soup_article.find('span', class_='margin_bottom uppercase flex align_items_center margin_right').get_text()
-                        except:
-                            article_author = None
-
-                    try:
-                        article_date = soup_article.find('div', class_='place_and_time').find('a')['href'].split('/')[-2]
-                        article_time = soup_article.find('div', class_='place_and_time').find('a', recursive=False).get_text().split('-')[-1].strip()  # todo: fix time error UTC+1
-                    except:
                         article_date = soup_article.find('a', class_='a_ti')['href'].split('/')[-2]
-                        article_time = None
+                        article_time = soup_article.find('div', {'class': ['place_and_time', 'a_pt']}).find('a', recursive=False).get_text().split('-')[-1].strip()[0:5]
+                    except:
+                        article_datetime = soup_article.find('time')['datetime']
+                        article_date = article_datetime.split('T')[0]
+                        article_time = article_datetime.split('T')[1].split('+')[0][0:5]
 
-                    for p_tag in content.find_all('p', recursive=False):
-                        article_content = p_tag.get_text()
+                    try:
+                        article_author = soup_article.find('div', {'class': ['a_auts', 'autor-texto']}).get_text().strip()
+                    except:
+                        article_author = None  # publi (example: https://elpais.com/tecnologia/2020/03/09/actualidad/1583773553_899599.html)
+
+                    article_content = ""
+                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p', recursive=False):
+                        article_content += p_tag.get_text() + "\n"
 
                     article_json = {
-                        'title': article_title,
-                        'subtitle': article_subtitle,
+                        'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text(),
+                        'subtitle': soup_article.find('h2', {'class': ['a_st', 'articulo-subtitulo']}).get_text(),
                         'author': article_author,
                         'date': article_date,
                         'time': article_time,
