@@ -105,15 +105,12 @@ class MainController(QtWidgets.QMainWindow):
         return df
 
     def tab_search_results(self):
-        top = self.ui.cb_top.currentIndex()
-        sources = self.get_sources(self.ui.cb_filter.currentIndex())
-        query = self.ui.tf_search.text()
         self.df_search = self.make_analysis(df=self.df_search,
                                             table=self.ui.table_search_rank,
-                                            sources=sources,
+                                            sources=self.get_sources(self.ui.cb_filter.currentIndex()),
                                             categories=self.CATEGORIES,
-                                            query=query,
-                                            top=top)
+                                            query=self.ui.tf_search.text(),
+                                            top=self.ui.cb_top.currentIndex())
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # SCRAPERS TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
     def scraper_20m(self):
@@ -199,16 +196,12 @@ class MainController(QtWidgets.QMainWindow):
         self.write_article(self.ui.tx_compare_preview, self.selected_file)
 
     def tab_compare_results(self):
-        sources = self.get_sources(self.ui.cb_res_source.currentIndex())
-        top = self.ui.cb_res_top.currentIndex()
-        query = jsutils.read_json(self.selected_file)['content']
-
         self.df_compare = self.make_analysis(df=self.df_compare,
                                              table=self.ui.table_compare_ref_rank,
-                                             sources=sources,
+                                             sources=self.get_sources(self.ui.cb_res_source.currentIndex()),
                                              categories=self.CATEGORIES,
-                                             query=query,
-                                             top=top)
+                                             query=jsutils.read_json(self.selected_file)['content'],
+                                             top=self.ui.cb_res_top.currentIndex())
 
     def write_article_ref_rank(self, index):
         self.write_article(self.ui.tx_compare_article, self.df_compare['file'][index.row()])
