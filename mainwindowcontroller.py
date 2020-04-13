@@ -25,6 +25,7 @@ class MainController(QtWidgets.QMainWindow):
         self.CATEGORIES = ['ciencia', 'salud', 'tecnologia']
         self.SOURCES = ['20Minutos', 'elMundo', 'elPais']
         self.selected_file = ""
+        self.pre_process_all_files()
 
         # analysis TAB
         self.ui.btn_search.clicked.connect(self.tab_search_results)
@@ -39,7 +40,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.btn_scrapers_elMundo_run.clicked.connect(self.scraper_elMundo)
         self.ui.btn_scrapers_run_all.clicked.connect(self.scraper_run_all)
         self.ui.btn_scrapers_refresh_sta.clicked.connect(self.refresh)
-        self.ui.btn_make_analysis.clicked.connect(la.pre_process_all_files)  # btn to tokenize all files
+        self.ui.btn_make_analysis.clicked.connect(self.pre_process_all_files)  # btn to tokenize all files
         self.refresh()
 
         # compare TAB
@@ -118,14 +119,17 @@ class MainController(QtWidgets.QMainWindow):
     # # # # # # # # # # # # # # # # # # # # # # # # # # SCRAPERS TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
     def scraper_20m(self):
         scr.scraper_20minutos(self.get_categories(self.ui.cb_scrapers_20m.currentIndex()))
+        self.pre_process_all_files()
         self.refresh()
 
     def scraper_elMundo(self):
         scr.scraper_elMundo(self.get_categories(self.ui.cb_scrapers_elMundo.currentIndex()))
+        self.pre_process_all_files()
         self.refresh()
 
     def scraper_elPais(self):
         scr.scraper_elPais(self.get_categories(self.ui.cb_scrapers_elPais.currentIndex()))
+        self.pre_process_all_files()
         self.refresh()
 
     def scraper_run_all(self):
@@ -157,6 +161,9 @@ class MainController(QtWidgets.QMainWindow):
             int(self.ui.lbl_scrapers_elPais_health_result.text()) +
             int(self.ui.lbl_scrapers_elPais_science_result.text()) +
             int(self.ui.lbl_scrapers_elPais_tech_result.text()))
+
+    def pre_process_all_files(self):
+        la.pre_process_all_files()
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # COMPARE TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
     def select_sources(self, index):
