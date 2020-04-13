@@ -92,8 +92,11 @@ class MainController(QtWidgets.QMainWindow):
 
     def make_analysis(self, df, table, sources, categories, query, top):
         self.create_alert_window("Processing", "Please wait for the process to finish")
-        df = la.query_similarity(sources, categories, la.total_idf(sources, categories), la.get_query_tf_idf(query),
-                                 top)
+        df = la.query_similarity(sources=sources,
+                                 categories=categories,
+                                 total_idf=la.total_idf(sources, categories, query),
+                                 query_tf=la.get_query_tf(query),
+                                 top=top)
         rows = len(df)
         table.setRowCount(rows)
         table.setColumnCount(1)

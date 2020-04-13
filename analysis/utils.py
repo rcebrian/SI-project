@@ -53,7 +53,7 @@ def pre_process_all_files():
 
 
 def compute_tf(processed_tokens):
-    total_words = len(processed_tokens)
+    # total_words = len(processed_tokens)
 
     df = pd.DataFrame(columns=['words', 'values'])
     fr = FreqDist(processed_tokens)
@@ -61,10 +61,10 @@ def compute_tf(processed_tokens):
     i = 0
     for word, value in fr.items():
         df.loc[i] = [word, value]
-        i = i + 1
+        i += 1
 
-    for i in range(len(df)):
-        df['values'][i] = df['values'][i] / total_words
+    # for i in range(len(df)):
+    #     df['values'][i] = df['values'][i] / total_words
 
     return df
 
@@ -78,7 +78,7 @@ def compute_idf(processed_tokens):
     i = 0
     for word, value in fr.items():
         df.loc[i] = [word, value]
-        i = i + 1
+        i += 1
 
     for i in range(len(df)):
         df['values'][i] = math.log(total_words / df['values'][i])
@@ -86,11 +86,11 @@ def compute_idf(processed_tokens):
     return df
 
 
-def compute_idf_tokens(sources, categories):
+def compute_idf_tokens(sources, categories, query_tokens):
     stemmed_tokens = []
 
-    for source in sources:  # ['20Minutos', 'elMundo', 'elPais']:
-        for category in categories:  # ['ciencia', 'salud', 'tecnologia']:
+    for source in sources:
+        for category in categories:
             dir_path = './data/' + source + '/' + category + '/'
             for file in os.listdir(dir_path):
                 filepath = dir_path + file
@@ -99,6 +99,8 @@ def compute_idf_tokens(sources, categories):
                     for token in js['processed']:
                         stemmed_tokens.append(token)
                     f.close()
+    for token in query_tokens:
+        stemmed_tokens.append(token)
     df = compute_idf(stemmed_tokens)
     return df
 
@@ -126,23 +128,25 @@ def cosine_formula(df_tf_idf, df_tf_idf_query):
         return numerator / denominator
 
 
-def query_similarity(sources, categories, total_idf, query_tf_idf, top):
+def query_similarity(sources, categories, total_idf, query_tf, top):
     stemmed_tokens = []
     json_files = []
     df_idf1 = pd.DataFrame(columns=['words', 'values'])
     df_sim = pd.DataFrame(columns=['file', 'similarity'])
 
     # remove unnecessary tokens
-    for i in range(len(query_tf_idf)):
-        if query_tf_idf['words'][i] in total_idf['words'].values:
-            df_idf1 = df_idf1.append(total_idf[total_idf['words'] == query_tf_idf['words'][i]])
+    for i in range(len(query_tf)):
+        if query_tf['words'][i] in total_idf['words'].values:
+            df_idf1 = df_idf1.append(total_idf[total_idf['words'] == query_tf['words'][i]])
             # cambio de la Jazi
             df_idf1.reset_index(inplace=True)
             del df_idf1['index']
         else:
-            df_idf1.loc[i] = [query_tf_idf['words'][i], 0]
+            df_idf1.loc[i] = [query_tf['words'][i], 0]
     df_idf1.reset_index(inplace=True)
     del df_idf1['index']
+
+    query_tf_idf = compute_tf_idf(df_idf=df_idf1, df_tf=query_tf)
 
     # save all stemmed tokens and filename
     for source in sources:
@@ -157,13 +161,13 @@ def query_similarity(sources, categories, total_idf, query_tf_idf, top):
                     f.close()
 
     for s in range(len(stemmed_tokens)):
-        tf = compute_tf(stemmed_tokens[s])
+        query_tf = compute_tf(stemmed_tokens[s])
         df_tf = pd.DataFrame(columns=['words', 'values'])
 
         # remove unnecessary tokens
         for i in range(len(query_tf_idf)):
-            if query_tf_idf['words'][i] in tf['words'].values:
-                df_tf = df_tf.append(tf[tf['words'] == query_tf_idf['words'][i]])
+            if query_tf_idf['words'][i] in query_tf['words'].values:
+                df_tf = df_tf.append(query_tf[query_tf['words'] == query_tf_idf['words'][i]])
                 # cambio de la Jazi
                 df_tf.reset_index(inplace=True)
                 del df_tf['index']
@@ -190,12 +194,11 @@ def query_similarity(sources, categories, total_idf, query_tf_idf, top):
     return df_sim
 
 
-def get_query_tf_idf(query):
+def get_query_tf(query):
     tf = compute_tf(pre_processing(query))
-    idf = compute_idf(pre_processing(query))
-    query_tf_idf = compute_tf_idf(df_tf=tf, df_idf=idf)
-    return query_tf_idf
+    return tf
 
 
-def total_idf(sources, categories):
-    return compute_idf_tokens(sources, categories)
+def total_idf(sources, categories, query):
+    tf = compute_tf(pre_processing(query))
+    return compute_idf_tokens(sources, categories, tf['words'].values)
