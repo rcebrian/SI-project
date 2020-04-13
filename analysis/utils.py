@@ -138,7 +138,6 @@ def query_similarity(sources, categories, total_idf, query_tf, top):
     for i in range(len(query_tf)):
         if query_tf['words'][i] in total_idf['words'].values:
             df_idf1 = df_idf1.append(total_idf[total_idf['words'] == query_tf['words'][i]])
-            # cambio de la Jazi
             df_idf1.reset_index(inplace=True)
             del df_idf1['index']
         else:
@@ -168,7 +167,6 @@ def query_similarity(sources, categories, total_idf, query_tf, top):
         for i in range(len(query_tf_idf)):
             if query_tf_idf['words'][i] in query_tf['words'].values:
                 df_tf = df_tf.append(query_tf[query_tf['words'] == query_tf_idf['words'][i]])
-                # cambio de la Jazi
                 df_tf.reset_index(inplace=True)
                 del df_tf['index']
             else:
