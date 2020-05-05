@@ -56,25 +56,25 @@ class MainController(QtWidgets.QMainWindow):
 
     def get_categories(self, opt):
         categories = []
-        if opt is 0:
+        if opt == 0:
             categories = self.CATEGORIES
-        elif opt is 1:
+        elif opt == 1:
             categories.append('salud')
-        elif opt is 2:
+        elif opt == 2:
             categories.append('ciencia')
-        elif opt is 3:
+        elif opt == 3:
             categories.append('tecnologia')
         return categories
 
     def get_sources(self, opt):
         sources = []
-        if opt is 0:
+        if opt == 0:
             sources = self.SOURCES
-        elif opt is 1:
+        elif opt == 1:
             sources.append('20Minutos')
-        elif opt is 2:
+        elif opt == 2:
             sources.append('elMundo')
-        elif opt is 3:
+        elif opt == 3:
             sources.append('elPais')
         return sources
 
