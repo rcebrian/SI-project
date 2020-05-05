@@ -70,8 +70,9 @@ def scraper_elMundo(categories):
                         article_content += p_tag.get_text() + "\n"
 
                     for tag in soup_article.find_all('li', class_='ue-c-article__tags-item'):
-                        tags.append(tag.get_text())
-                        processed_tags.append(unidecode.unidecode(tag.get_text().lower()))
+                        tg = tag.get_text()
+                        tags.append(tg)
+                        processed_tags.append(unidecode.unidecode(tg.lower()))
 
                     article_json = {
                         'title': soup_article.find('h1').get_text(),
@@ -117,8 +118,7 @@ def scraper_elPais(categories):
 
                     try:
                         article_date = soup_article.find('a', class_='a_ti')['href'].split('/')[-2]
-                        article_time = soup_article.find('div', {'class': ['place_and_time', 'a_pt']}).find('a',
-                                                                                                            recursive=False).get_text().split(
+                        article_time = soup_article.find('div', {'class': ['place_and_time', 'a_pt']}).find('a', recursive=False).get_text().split(
                             '-')[-1].strip()[0:5]
                     except:
                         article_datetime = soup_article.find('time')['datetime']
@@ -132,12 +132,12 @@ def scraper_elPais(categories):
                         article_author = None  # publi (example: https://elpais.com/tecnologia/2020/03/09/actualidad/1583773553_899599.html)
 
                     for tag in soup_article.find_all('meta', property='article:tag'):
-                        tags.append(tag['content'])
-                        processed_tags.append(unidecode.unidecode(tag['content'].lower()))
+                        tg = tag['content']
+                        tags.append(tg)
+                        processed_tags.append(unidecode.unidecode(tg.lower()))
 
                     article_content = ""
-                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p',
-                                                                                                                   recursive=False):
+                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p', recursive=False):
                         article_content += p_tag.get_text() + "\n"
 
                     article_json = {
