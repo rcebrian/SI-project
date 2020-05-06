@@ -7,6 +7,32 @@ import unidecode
 import requests
 from bs4 import BeautifulSoup
 
+from nltk import RegexpTokenizer
+from nltk.stem.snowball import SnowballStemmer
+
+with open('./data/stopwords-es.json', 'r') as f:
+    stop_js = json.load(f)
+    ES_STOPWORDS = stop_js['words']
+
+def pre_process_tags(tags):
+    clean = []
+
+    tokenizer = RegexpTokenizer(r'\w+')
+    for tag in tags:
+        clean.extend(tokenizer.tokenize(tag.lower()))
+
+    tokens = []
+    for tag in clean:
+        if tag not in ES_STOPWORDS and not tag.isnumeric():
+            tokens.append(tag)
+
+    # apply stemmer
+    stemmer = SnowballStemmer('spanish')
+    stemmed_tokens = []
+    for token in tokens:
+        stemmed_tokens.append(stemmer.stem(token))
+
+    return stemmed_tokens
 
 def article_exists(old, new):
     with open(old, 'r') as f:
@@ -88,7 +114,7 @@ def scraper_elMundo(categories):
                         'time': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%H:%M'),
                         'content': article_content,
                         'tags': tags,
-                        'processed_tags': processed_tags,
+                        'processed_tags': pre_process_tags(processed_tags),
                         'processed': None
                     }
                     store_data('elMundo', category, article_json)
@@ -156,7 +182,7 @@ def scraper_elPais(categories):
                         'time': article_time,
                         'content': article_content,
                         'tags': tags,
-                        'processed_tags': processed_tags,
+                        'processed_tags': pre_process_tags(processed_tags),
                         'processed': None
                     }
                     store_data('elPais', category, article_json)
@@ -228,7 +254,7 @@ def scraper_20minutos(categories):
                         'time': article_time,
                         'content': article_content,
                         'tags': tags,
-                        'processed_tags': processed_tags,
+                        'processed_tags': pre_process_tags(processed_tags),
                         'processed': None
                     }
                     store_data('20Minutos', category, article_json)
