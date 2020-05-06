@@ -800,8 +800,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>372</width>
-                    <height>254</height>
+                    <width>353</width>
+                    <height>251</height>
                    </rect>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -1050,8 +1050,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>404</width>
-                    <height>254</height>
+                    <width>388</width>
+                    <height>251</height>
                    </rect>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -1103,6 +1103,267 @@
            </item>
            <item>
             <widget class="QTextEdit" name="tx_compare_article"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tag_rec">
+       <attribute name="title">
+        <string>Recommendations</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <widget class="QGroupBox" name="gb_references_2">
+          <property name="title">
+           <string>Reference</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_13">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <item>
+                <layout class="QHBoxLayout" name="HL_search_3">
+                 <item>
+                  <widget class="QLabel" name="lbl_reco_ref_source">
+                   <property name="text">
+                    <string>Source</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cb_reco_ref_source">
+                   <item>
+                    <property name="text">
+                     <string>All Sources</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>20 Minutos</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>El Mundo</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>El Pais</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QLabel" name="lbl_reco_ref_cat">
+                   <property name="text">
+                    <string>Category</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cb_reco_ref_cat">
+                   <property name="minimumSize">
+                    <size>
+                     <width>50</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>All Categories</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Health</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Science</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Technology</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="VL_ref_articles_2">
+               <item>
+                <widget class="QLabel" name="lbl_reco_prev_articles">
+                 <property name="text">
+                  <string>Articles</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QScrollArea" name="scroll_ref_articles_2">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scroll_reco_ref_articles_items">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>353</width>
+                    <height>251</height>
+                   </rect>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <item>
+                    <widget class="QTableWidget" name="table_reco_ref_articles">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>250</height>
+                      </size>
+                     </property>
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QAbstractScrollArea::AdjustToContents</enum>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <property name="showGrid">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_reco_ref_preview">
+             <property name="text">
+              <string>Preview</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="tx_reco_preview"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_rec_results">
+          <property name="title">
+           <string>Results</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <layout class="QHBoxLayout" name="HL_results_2">
+             <item>
+              <layout class="QVBoxLayout" name="VL_reco_rank">
+               <item>
+                <widget class="QLabel" name="lbl_reco_rank">
+                 <property name="text">
+                  <string>Ranking</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QScrollArea" name="scroll_reco_rank">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scroll_reco_rank_items">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>557</width>
+                    <height>251</height>
+                   </rect>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_16">
+                   <item>
+                    <widget class="QTableWidget" name="table_reco_ref_rank">
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
+                     <property name="sizeAdjustPolicy">
+                      <enum>QAbstractScrollArea::AdjustToContents</enum>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <property name="showGrid">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_result_article_2">
+             <property name="text">
+              <string>Article</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="tx_reco_article"/>
            </item>
           </layout>
          </widget>

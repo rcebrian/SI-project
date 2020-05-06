@@ -66,6 +66,12 @@ def scraper_elMundo(categories):
                     article_datetime = soup_article.find('time')['datetime']
                     article_content = ""
                     content = soup_article.find('div', class_='ue-l-article__body ue-c-article__body')
+
+                    try:
+                        soup_author = soup_article.find('div', class_='ue-c-article__byline-name').get_text()
+                    except:
+                        soup_author = None
+
                     for p_tag in content.find_all('p', recursive=False):
                         article_content += p_tag.get_text() + "\n"
 
@@ -77,7 +83,7 @@ def scraper_elMundo(categories):
                     article_json = {
                         'title': soup_article.find('h1').get_text(),
                         'subtitle': soup_article.find('p', class_='ue-c-article__standfirst').get_text(),
-                        'author': soup_article.find('div', class_='ue-c-article__byline-name').get_text(),
+                        'author': soup_author,
                         'date': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%Y-%m-%d'),
                         'time': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%H:%M'),
                         'content': article_content,
@@ -85,8 +91,8 @@ def scraper_elMundo(categories):
                         'processed_tags': processed_tags,
                         'processed': None
                     }
-                    # store_data('elMundo', category, article_json)
-                    print(json.dumps(article_json, indent=4, ensure_ascii=False))
+                    store_data('elMundo', category, article_json)
+                    # print(json.dumps(article_json, indent=4, ensure_ascii=False))
 
 
 def scraper_elPais(categories):
@@ -118,7 +124,8 @@ def scraper_elPais(categories):
 
                     try:
                         article_date = soup_article.find('a', class_='a_ti')['href'].split('/')[-2]
-                        article_time = soup_article.find('div', {'class': ['place_and_time', 'a_pt']}).find('a', recursive=False).get_text().split(
+                        article_time = soup_article.find('div', {'class': ['place_and_time', 'a_pt']}).find('a',
+                                                                                                            recursive=False).get_text().split(
                             '-')[-1].strip()[0:5]
                     except:
                         article_datetime = soup_article.find('time')['datetime']
@@ -137,7 +144,8 @@ def scraper_elPais(categories):
                         processed_tags.append(unidecode.unidecode(tg.lower()))
 
                     article_content = ""
-                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p', recursive=False):
+                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p',
+                                                                                                                   recursive=False):
                         article_content += p_tag.get_text() + "\n"
 
                     article_json = {
@@ -151,8 +159,8 @@ def scraper_elPais(categories):
                         'processed_tags': processed_tags,
                         'processed': None
                     }
-                    # store_data('elPais', category, article_json)
-                    print(json.dumps(article_json, indent=4, ensure_ascii=False))
+                    store_data('elPais', category, article_json)
+                    # print(json.dumps(article_json, indent=4, ensure_ascii=False))
 
 
 def scraper_20minutos(categories):
@@ -224,8 +232,8 @@ def scraper_20minutos(categories):
                         'processed': None
                     }
                     store_data('20Minutos', category, article_json)
-                    print(json.dumps(article_json, indent=4, ensure_ascii=False))
+                    # print(json.dumps(article_json, indent=4, ensure_ascii=False))
 
 
 if __name__ == '__main__':
-    scraper_20minutos(['tecnologia'])
+    scraper_elMundo(['tecnologia', 'ciencia', 'salud'])

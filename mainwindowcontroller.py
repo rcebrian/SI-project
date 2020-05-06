@@ -10,6 +10,7 @@ from analysis import utils as la
 from files import utils as jsutils
 from mainwindow import Ui_MainWindow
 from scrapers import scrapers as scr
+from recommendations import utils as recom
 
 
 class MainController(QtWidgets.QMainWindow):
@@ -22,6 +23,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.df_search = pd.DataFrame(columns=['file', 'similarity'])
         self.df_compare = pd.DataFrame(columns=['file', 'similarity'])
+        self.df_recom = pd.DataFrame(columns=['filepath', 'tags', 'similarity'])
         self.CATEGORIES = ['ciencia', 'salud', 'tecnologia']
         self.SOURCES = ['20Minutos', 'elMundo', 'elPais']
         self.selected_file = ""
@@ -30,9 +32,6 @@ class MainController(QtWidgets.QMainWindow):
         # analysis TAB
         self.ui.btn_search.clicked.connect(self.tab_search_results)
         self.ui.table_search_rank.itemClicked.connect(self.write_article_rank)
-        # todo remove
-        self.ui.tf_search.setText(
-            'El Gobierno calcula que España retornará a la vida normal, de forma escalonada, a partir del 26 de abril')
 
         # scrapers TAB
         self.ui.btn_scrapers_20m_run.clicked.connect(self.scraper_20m)
@@ -44,12 +43,19 @@ class MainController(QtWidgets.QMainWindow):
         self.refresh()
 
         # compare TAB
-        self.ui.cb_ref_source.currentIndexChanged.connect(self.select_sources)
-        self.ui.cb_ref_cat.currentIndexChanged.connect(self.select_categories)
+        self.ui.cb_ref_source.currentIndexChanged.connect(self.select_sources_compare)
+        self.ui.cb_ref_cat.currentIndexChanged.connect(self.select_categories_compare)
         self.ui.table_compare_ref_articles.itemClicked.connect(self.tab_compare_write_article)
         self.ui.table_compare_ref_rank.itemClicked.connect(self.write_article_ref_rank)
         self.ui.btn_ref_search.clicked.connect(self.tab_compare_results)
-        self.select_categories(0)
+        self.select_categories_compare(0)
+
+        # recommendations TAB
+        self.ui.cb_reco_ref_source.currentIndexChanged.connect(self.select_sources_reco)
+        self.ui.cb_reco_ref_cat.currentIndexChanged.connect(self.select_categories_reco)
+        self.ui.table_reco_ref_articles.itemClicked.connect(self.tab_reco_write_article)
+        self.ui.table_reco_ref_rank.itemClicked.connect(self.write_article_reco_rank)
+        self.select_categories_reco(0)
 
     def create_alert_window(self, title, content):
         QMessageBox.about(self, title, content)
@@ -86,6 +92,7 @@ class MainController(QtWidgets.QMainWindow):
             "<html><h6><b>" + str(js['author']) + "</b> " + str(js['date']) + " " + str(js['time']) + "</h6></html>")
         table.append("<html><h6><b>" + str(js['subtitle']) + "</b></h6></html>")
         table.append("<html><p>" + str(js['content']) + "</p></html>")
+        table.append("<html><b>TAGS: </b>" + "".join([str(x) + ', ' for x in js['tags']]) + "</p></html>")
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # SEARCH TAB # # # # # # # # # # # # # # # # # # # # # # # # # # #
     def write_article_rank(self, index):
@@ -166,7 +173,7 @@ class MainController(QtWidgets.QMainWindow):
         la.pre_process_all_files()
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # COMPARE TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
-    def select_sources(self, index):
+    def select_sources_compare(self, index):
         sources = self.get_sources(self.ui.cb_ref_source.currentIndex())
 
         self.ui.table_compare_ref_articles.setRowCount(0)
@@ -183,9 +190,9 @@ class MainController(QtWidgets.QMainWindow):
                     self.ui.table_compare_ref_articles.setItem(row, 0, item)
                     row += 1
 
-    def select_categories(self, index):
+    def select_categories_compare(self, index):
         sources = self.get_sources(self.ui.cb_ref_source.currentIndex())
-        categories = self.get_categories(self.ui.cb_ref_source.currentIndex())
+        categories = self.get_categories(self.ui.cb_ref_cat.currentIndex())
 
         self.ui.table_compare_ref_articles.setRowCount(0)
         self.ui.table_compare_ref_articles.setColumnCount(1)
@@ -215,6 +222,59 @@ class MainController(QtWidgets.QMainWindow):
 
     def write_article_ref_rank(self, index):
         self.write_article(self.ui.tx_compare_article, self.df_compare['file'][index.row()])
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # RECO TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
+    def select_sources_reco(self, index):
+        sources = self.get_sources(self.ui.cb_reco_ref_source.currentIndex())
+
+        self.ui.table_reco_ref_articles.setRowCount(0)
+        self.ui.table_reco_ref_articles.setColumnCount(1)
+        self.ui.table_reco_ref_articles.clear()
+        row = 0
+        for source in sources:
+            for category in self.CATEGORIES:
+                path = './data/' + source + '/' + category + '/'
+                for file in os.listdir(path):
+                    filepath = path + file
+                    self.ui.table_reco_ref_articles.setRowCount(self.ui.table_reco_ref_articles.rowCount() + 1)
+                    item = QTableWidgetItem(filepath[7:-5])
+                    self.ui.table_reco_ref_articles.setItem(row, 0, item)
+                    row += 1
+
+    def select_categories_reco(self, index):
+        sources = self.get_sources(self.ui.cb_reco_ref_source.currentIndex())
+        categories = self.get_categories(self.ui.cb_reco_ref_cat.currentIndex())
+
+        self.ui.table_reco_ref_articles.setRowCount(0)
+        self.ui.table_reco_ref_articles.setColumnCount(1)
+        self.ui.table_reco_ref_articles.clear()
+        row = 0
+        for source in sources:
+            for category in categories:
+                path = './data/' + source + '/' + category + '/'
+                for file in os.listdir(path):
+                    filepath = path + file
+                    self.ui.table_reco_ref_articles.setRowCount(self.ui.table_reco_ref_articles.rowCount() + 1)
+                    item = QTableWidgetItem(filepath[7:-5])
+                    self.ui.table_reco_ref_articles.setItem(row, 0, item)
+                    row += 1
+
+    def tab_reco_write_article(self, index):
+        self.selected_file = './data/' + str(self.ui.table_reco_ref_articles.currentItem().text()) + '.json'
+        self.write_article(self.ui.tx_reco_preview, self.selected_file)
+
+        self.df_recom = recom.all_sim(self.selected_file, self.SOURCES, self.CATEGORIES)
+        rows = len(self.df_recom)
+        self.ui.table_reco_ref_rank.setRowCount(rows)
+        self.ui.table_reco_ref_rank.setColumnCount(1)
+        for row in range(rows):
+            item = QTableWidgetItem(
+                self.df_recom['file'][row][7:-5] + '     -     SIMILARITY ' + str(
+                    round(self.df_recom['similarity'][row] * 100, 2)) + '%')
+            self.ui.table_reco_ref_rank.setItem(row, 0, item)
+
+    def write_article_reco_rank(self, index):
+        self.write_article(self.ui.tx_reco_article, self.df_recom['file'][index.row()])
 
 
 def run():
