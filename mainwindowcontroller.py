@@ -268,9 +268,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.table_reco_ref_rank.setRowCount(rows)
         self.ui.table_reco_ref_rank.setColumnCount(1)
         for row in range(rows):
-            item = QTableWidgetItem(
-                self.df_recom['file'][row][7:-5] + '     -     SIMILARITY ' + str(
-                    round(self.df_recom['similarity'][row] * 100, 2)) + '%')
+            item = QTableWidgetItem(str(round(self.df_recom['similarity'][row] * 100, 2)) + ' % - ' + self.df_recom['tags'][row])
             self.ui.table_reco_ref_rank.setItem(row, 0, item)
 
     def write_article_reco_rank(self, index):

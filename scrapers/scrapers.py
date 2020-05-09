@@ -7,32 +7,6 @@ import unidecode
 import requests
 from bs4 import BeautifulSoup
 
-from nltk import RegexpTokenizer
-from nltk.stem.snowball import SnowballStemmer
-
-with open('./data/stopwords-es.json', 'r') as f:
-    stop_js = json.load(f)
-    ES_STOPWORDS = stop_js['words']
-
-def pre_process_tags(tags):
-    clean = []
-
-    tokenizer = RegexpTokenizer(r'\w+')
-    for tag in tags:
-        clean.extend(tokenizer.tokenize(tag.lower()))
-
-    tokens = []
-    for tag in clean:
-        if tag not in ES_STOPWORDS and not tag.isnumeric():
-            tokens.append(tag)
-
-    # apply stemmer
-    stemmer = SnowballStemmer('spanish')
-    stemmed_tokens = []
-    for token in tokens:
-        stemmed_tokens.append(stemmer.stem(token))
-
-    return stemmed_tokens
 
 def article_exists(old, new):
     with open(old, 'r') as f:
@@ -107,14 +81,14 @@ def scraper_elMundo(categories):
                         processed_tags.append(unidecode.unidecode(tg.lower()))
 
                     article_json = {
-                        'title': soup_article.find('h1').get_text(),
+                        'title': soup_article.find('h1').get_text().strip(),
                         'subtitle': soup_article.find('p', class_='ue-c-article__standfirst').get_text(),
                         'author': soup_author,
                         'date': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%Y-%m-%d'),
                         'time': datetime.strptime(article_datetime, "%Y-%m-%dT%H:%M:%SZ").strftime('%H:%M'),
                         'content': article_content,
                         'tags': tags,
-                        'processed_tags': pre_process_tags(processed_tags),
+                        'processed_tags': processed_tags,
                         'processed': None
                     }
                     store_data('elMundo', category, article_json)
@@ -175,14 +149,14 @@ def scraper_elPais(categories):
                         article_content += p_tag.get_text() + "\n"
 
                     article_json = {
-                        'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text(),
+                        'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text().strip(),
                         'subtitle': soup_article.find('h2', {'class': ['a_st', 'articulo-subtitulo']}).get_text(),
                         'author': article_author,
                         'date': article_date,
                         'time': article_time,
                         'content': article_content,
                         'tags': tags,
-                        'processed_tags': pre_process_tags(processed_tags),
+                        'processed_tags': processed_tags,
                         'processed': None
                     }
                     store_data('elPais', category, article_json)
@@ -247,14 +221,14 @@ def scraper_20minutos(categories):
                         article_content += p_tag.get_text() + "\n"
 
                     article_json = {
-                        'title': soup_article.find('h1').get_text(),
+                        'title': soup_article.find('h1').get_text().strip(),
                         'subtitle': article_subtitle,
                         'author': article_author,
                         'date': article_date,
                         'time': article_time,
                         'content': article_content,
                         'tags': tags,
-                        'processed_tags': pre_process_tags(processed_tags),
+                        'processed_tags': processed_tags,
                         'processed': None
                     }
                     store_data('20Minutos', category, article_json)

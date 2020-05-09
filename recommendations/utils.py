@@ -11,6 +11,12 @@ def read_tags(filepath):
         f.close()
     return js['processed_tags']
 
+def read_title(filepath):
+    with open(filepath, 'r') as f:
+        js = json.load(f)
+        f.close()
+    return js['title']
+
 
 def sim(tag_doc1, tag_doc2):
     if tag_doc1 == tag_doc2:
@@ -34,8 +40,13 @@ def all_sim(article, sources, categories):
                 filepath = dir_path + file
                 if filepath != article:  # no hacer la compracion con el mismo
                     tags = read_tags(filepath)
-                    df.loc[-1] = [filepath, tags, sim(article_tags, tags)]
+                    title = read_title(filepath)
+                    df.loc[-1] = [filepath, title, sim(article_tags, tags)]
                     df.index = df.index + 1
+
+    # drop items with similarity <= 5%
+    no_similarity = df[df['similarity'] <= 0.05].index
+    df.drop(no_similarity, inplace=True)
 
     # order by DES and reset index
     df = df.sort_values('similarity', ascending=False)
