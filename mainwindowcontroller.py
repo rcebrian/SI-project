@@ -23,7 +23,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.df_search = pd.DataFrame(columns=['file', 'similarity'])
         self.df_compare = pd.DataFrame(columns=['file', 'similarity'])
-        self.df_recom = pd.DataFrame(columns=['filepath', 'tags', 'similarity'])
+        self.df_recom = pd.DataFrame(columns=['filepath', 'title', 'similarity', 'percent'])
         self.CATEGORIES = ['ciencia', 'salud', 'tecnologia']
         self.SOURCES = ['20Minutos', 'elMundo', 'elPais']
         self.selected_file = ""
@@ -84,15 +84,14 @@ class MainController(QtWidgets.QMainWindow):
             sources.append('elPais')
         return sources
 
-    def write_article(self, table, filepath):
-        table.clear()
+    def write_article(self, tx, filepath):
+        tx.clear()
         js = jsutils.read_json(filepath)
-        table.setText("<html><h3><b>" + str(js['title']) + "</b></h3></html>")
-        table.append(
-            "<html><h6><b>" + str(js['author']) + "</b> " + str(js['date']) + " " + str(js['time']) + "</h6></html>")
-        table.append("<html><h6><b>" + str(js['subtitle']) + "</b></h6></html>")
-        table.append("<html><p>" + str(js['content']) + "</p></html>")
-        table.append("<html><b>TAGS: </b>" + "".join([str(x) + ', ' for x in js['tags']]) + "</p></html>")
+        tx.setText("<html><h3><b>" + str(js['title']) + "</b></h3></html>")
+        tx.append("<html><h6><b>" + str(js['author']) + "</b> " + str(js['date']) + " " + str(js['time']) + "</h6></html>")
+        tx.append("<html><h6><b>" + str(js['subtitle']) + "</b></h6></html>")
+        tx.append("<html><p>" + str(js['content']) + "</p></html>")
+        tx.append("<html><b>TAGS: </b>" + "".join([str(x) + ' | ' for x in js['tags']]) + "</p></html>")
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # SEARCH TAB # # # # # # # # # # # # # # # # # # # # # # # # # # #
     def write_article_rank(self, index):
@@ -268,7 +267,7 @@ class MainController(QtWidgets.QMainWindow):
         self.ui.table_reco_ref_rank.setRowCount(rows)
         self.ui.table_reco_ref_rank.setColumnCount(1)
         for row in range(rows):
-            item = QTableWidgetItem(str(round(self.df_recom['similarity'][row] * 100, 2)) + ' % - ' + self.df_recom['tags'][row])
+            item = QTableWidgetItem(str(self.df_recom['percent'][row]) + ' % - ' + self.df_recom['title'][row])
             self.ui.table_reco_ref_rank.setItem(row, 0, item)
 
     def write_article_reco_rank(self, index):

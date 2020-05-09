@@ -1,24 +1,12 @@
 # -*- encoding: utf-8 -*-
 
 import pandas as pd
-import json
 import os
 
-
-def read_tags(filepath):
-    with open(filepath, 'r') as f:
-        js = json.load(f)
-        f.close()
-    return js['processed_tags']
-
-def read_title(filepath):
-    with open(filepath, 'r') as f:
-        js = json.load(f)
-        f.close()
-    return js['title']
+from files import utils as jsutils
 
 
-def sim(tag_doc1, tag_doc2):
+def similarity(tag_doc1, tag_doc2):
     if tag_doc1 == tag_doc2:
         return 1.0
     else:
@@ -28,10 +16,9 @@ def sim(tag_doc1, tag_doc2):
 
 
 def all_sim(article, sources, categories):
-    df = pd.DataFrame(columns=['file', 'tags', 'similarity'])
+    df = pd.DataFrame(columns=['file', 'title', 'similarity', 'percent'])
 
-    article_tags = read_tags(article)
-    # print(article_tags)
+    article_title, article_tags = jsutils.read_title_tags(article)
 
     for source in sources:
         for category in categories:
@@ -39,17 +26,11 @@ def all_sim(article, sources, categories):
             for file in os.listdir(dir_path):
                 filepath = dir_path + file
                 if filepath != article:  # no hacer la compracion con el mismo
-                    tags = read_tags(filepath)
-                    title = read_title(filepath)
-                    df.loc[-1] = [filepath, title, sim(article_tags, tags)]
-                    df.index = df.index + 1
+                    title, tags = jsutils.read_title_tags(filepath)
+                    sim = similarity(article_tags, tags)
+                    if sim >= 0.10:
+                        percent = str(round(sim * 100, 2))
+                        df.loc[-1] = [filepath, title, sim, percent]
+                        df.index = df.index + 1
 
-    # drop items with similarity <= 5%
-    no_similarity = df[df['similarity'] <= 0.05].index
-    df.drop(no_similarity, inplace=True)
-
-    # order by DES and reset index
-    df = df.sort_values('similarity', ascending=False)
-    df.reset_index(inplace=True)
-    del df['index']
-    return df
+    return jsutils.reset_df(df, ['similarity', 'title'])

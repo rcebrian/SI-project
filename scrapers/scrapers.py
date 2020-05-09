@@ -1,46 +1,11 @@
 # -*- encoding: utf-8 -*-
-import json
-import os
 from datetime import datetime
 import unidecode
 
 import requests
 from bs4 import BeautifulSoup
 
-
-def article_exists(old, new):
-    with open(old, 'r') as f:
-        js = json.load(f)
-    if js['date'] == new['date'] and js['time'] == new['time']:
-        return True
-    else:
-        return False
-
-
-def store_data(directory, category, content):
-    path = "./data/" + directory + "/" + category + "/"
-    dates = []
-
-    exist = False
-
-    for js in os.listdir(path):
-        if content['date'] in js:
-            if article_exists(path + js, content):
-                exist = True
-            dates.append(int(js.split('.')[-2]))
-    if len(dates) == 0:
-        a_id = 1
-    else:
-        dates.sort()
-        a_id = dates[-1] + 1
-
-    print(exist)
-    if not exist:
-        path = "./data/" + directory + "/" + category + "/" + category + "." + content['date'] + '.{0:0>3}'.format(
-            a_id) + ".json"
-        print('> Writing file: ', path)
-        with open(path, 'w') as f:
-            json.dump(content, f, indent=4, ensure_ascii=False)
+from files import utils as jsutils
 
 
 def scraper_elMundo(categories):
@@ -91,8 +56,8 @@ def scraper_elMundo(categories):
                         'processed_tags': processed_tags,
                         'processed': None
                     }
-                    store_data('elMundo', category, article_json)
-                    # print(json.dumps(article_json, indent=4, ensure_ascii=False))
+                    jsutils.store_data('elMundo', category, article_json)
+                    jsutils.store_data
 
 
 def scraper_elPais(categories):
@@ -159,8 +124,7 @@ def scraper_elPais(categories):
                         'processed_tags': processed_tags,
                         'processed': None
                     }
-                    store_data('elPais', category, article_json)
-                    # print(json.dumps(article_json, indent=4, ensure_ascii=False))
+                    jsutils.store_data('elPais', category, article_json)
 
 
 def scraper_20minutos(categories):
@@ -231,9 +195,4 @@ def scraper_20minutos(categories):
                         'processed_tags': processed_tags,
                         'processed': None
                     }
-                    store_data('20Minutos', category, article_json)
-                    # print(json.dumps(article_json, indent=4, ensure_ascii=False))
-
-
-if __name__ == '__main__':
-    scraper_elMundo(['tecnologia', 'ciencia', 'salud'])
+                    jsutils.store_data('20Minutos', category, article_json)
