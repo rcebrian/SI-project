@@ -91,7 +91,7 @@ class MainController(QtWidgets.QMainWindow):
         tx.append("<html><h6><b>" + str(js['author']) + "</b> " + str(js['date']) + " " + str(js['time']) + "</h6></html>")
         tx.append("<html><h6><b>" + str(js['subtitle']) + "</b></h6></html>")
         tx.append("<html><p>" + str(js['content']) + "</p></html>")
-        tx.append("<html><b>TAGS: </b>" + "".join([str(x) + ' | ' for x in js['tags']]) + "</p></html>")
+        tx.append("<html><b>TAGS: </b>" + "".join([str(x) + ' | ' for x in js['tags']])[:-2] + "</p></html>")
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # SEARCH TAB # # # # # # # # # # # # # # # # # # # # # # # # # # #
     def write_article_rank(self, index):
