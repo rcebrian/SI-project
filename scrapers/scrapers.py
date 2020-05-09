@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from files import utils as jsutils
+from analysis import utils as anlz
 
 
 def scraper_elMundo(categories):
@@ -44,6 +45,7 @@ def scraper_elMundo(categories):
                         tg = tag.get_text()
                         tags.append(tg)
                         processed_tags.append(unidecode.unidecode(tg.lower()))
+                    processed_tags.extend(anlz.generate_tags_from_text(article_content))
 
                     article_json = {
                         'title': soup_article.find('h1').get_text().strip(),
@@ -57,7 +59,6 @@ def scraper_elMundo(categories):
                         'processed': None
                     }
                     jsutils.store_data('elMundo', category, article_json)
-                    jsutils.store_data
 
 
 def scraper_elPais(categories):
@@ -103,15 +104,16 @@ def scraper_elPais(categories):
                     except:
                         article_author = None  # publi (example: https://elpais.com/tecnologia/2020/03/09/actualidad/1583773553_899599.html)
 
-                    for tag in soup_article.find_all('meta', property='article:tag'):
-                        tg = tag['content']
-                        tags.append(tg)
-                        processed_tags.append(unidecode.unidecode(tg.lower()))
-
                     article_content = ""
                     for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p',
                                                                                                                    recursive=False):
                         article_content += p_tag.get_text() + "\n"
+
+                    for tag in soup_article.find_all('meta', property='article:tag'):
+                        tg = tag['content']
+                        tags.append(tg)
+                        processed_tags.append(unidecode.unidecode(tg.lower()))
+                    processed_tags.extend(anlz.generate_tags_from_text(article_content))
 
                     article_json = {
                         'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text().strip(),
@@ -183,6 +185,8 @@ def scraper_20minutos(categories):
                     content = soup_article.find('div', class_='article-text')
                     for p_tag in content.find_all('p', class_='paragraph', recursive=False):
                         article_content += p_tag.get_text() + "\n"
+
+                    processed_tags.extend(anlz.generate_tags_from_text(article_content))
 
                     article_json = {
                         'title': soup_article.find('h1').get_text().strip(),

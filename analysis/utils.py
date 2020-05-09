@@ -2,13 +2,27 @@ import json
 import math
 import os
 
+import collections
 import pandas as pd
 from nltk import RegexpTokenizer, FreqDist
 from nltk.stem.snowball import SnowballStemmer
 
+from files import utils as jsutils
+
 with open('./data/stopwords-es.json', 'r') as f:
     stop_js = json.load(f)
     ES_STOPWORDS = stop_js['words']
+
+
+def generate_tags_from_text(text, n=5):
+    tokenizer = RegexpTokenizer(r'\w+')
+    text = tokenizer.tokenize(text.lower())
+    cnt = collections.Counter(text)
+
+    y = lambda l: l if (l not in ES_STOPWORDS and not l.isnumeric()) else None
+    res = ([y(x[0]) for x in cnt.most_common() if y(x[0])])  # apply lambda function and discard None values
+
+    return res[:n]
 
 
 def pre_processing(data):
@@ -53,8 +67,6 @@ def pre_process_all_files():
 
 
 def compute_tf(processed_tokens):
-    # total_words = len(processed_tokens)
-
     df = pd.DataFrame(columns=['words', 'values'])
     fr = FreqDist(processed_tokens)
 
@@ -62,9 +74,6 @@ def compute_tf(processed_tokens):
     for word, value in fr.items():
         df.loc[i] = [word, value]
         i += 1
-
-    # for i in range(len(df)):
-    #     df['values'][i] = df['values'][i] / total_words
 
     return df
 
@@ -184,11 +193,7 @@ def query_similarity(sources, categories, total_idf, query_tf, top):
                 pos = df_sim[df_sim['similarity'] == df_sim['similarity'].min()].index[0]
                 df_sim.loc[pos] = [json_files[s], sim]
 
-    # order by DES and reset index
-    df_sim = df_sim.sort_values('similarity', ascending=False)
-    df_sim.reset_index(inplace=True)
-    del df_sim['index']
-
+    df_sim = jsutils.reset_df(df_sim, ['similarity'])
     return df_sim
 
 

@@ -6,7 +6,13 @@
     "time": "18:36",
     "content": "\"En la Uci estaba ingresado un chaval de 28 años que se llama Francesco. Del jueves al viernes, empeoró su situación. Pedimos al comité ético si podíamos usar plasma para su tratamiento. Nos dieron permiso\", cuenta Giuseppe de Donno, médico de 53 años, responsable del área de Neumología de la Unidad de Cuidados Intensivos del Hospital Carlo Poma de Mantova. Está conmovido por los últimos meses de trabajo luchando contra la infección. \"Después de 24 horas había remitido la fiebre y estaba bien. L\n",
     "tags": [],
-    "processed_tags": [],
+    "processed_tags": [
+        "años",
+        "uci",
+        "ingresado",
+        "chaval",
+        "llama"
+    ],
     "processed": [
         "uci",
         "ingres",

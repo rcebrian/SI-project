@@ -1,5 +1,5 @@
 {
-    "title": "\n                        Detectan una bola de fuego sobrevolando España a 82.000 km/h\n                    ",
+    "title": "Detectan una bola de fuego sobrevolando España a 82.000 km/h",
     "subtitle": "El fenómeno se se inició a una altitud de unos 89 kilómetros sobre el centro de la provincia de Cáceres.",
     "author": "EFE",
     "date": "2020-05-06",
@@ -11,9 +11,14 @@
         "Meteorito"
     ],
     "processed_tags": [
-        "astronomi",
-        "extremadur",
-        "meteorit"
+        "astronomia",
+        "extremadura",
+        "meteorito",
+        "kilómetros",
+        "proyecto",
+        "smart",
+        "bola",
+        "fuego"
     ],
     "processed": [
         "detector",

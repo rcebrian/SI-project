@@ -1,5 +1,5 @@
 {
-    "title": "\n                        La web que muestra cómo afectaría el impacto de un meteorito en tu ciudad\n                    ",
+    "title": "La web que muestra cómo afectaría el impacto de un meteorito en tu ciudad",
     "subtitle": "Puedes elegir el lugar exacto de la caída y el tamaño del asteroide.",
     "author": "20minutos",
     "date": "2020-02-23",
@@ -9,7 +9,12 @@
         "Meteorito"
     ],
     "processed_tags": [
-        "meteorit"
+        "meteorito",
+        "círculo",
+        "efectos",
+        "asteroide",
+        "diámetro",
+        "color"
     ],
     "processed": [
         "argument",
