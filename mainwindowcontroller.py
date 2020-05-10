@@ -28,6 +28,7 @@ class MainController(QtWidgets.QMainWindow):
         self.SOURCES = ['20Minutos', 'elMundo', 'elPais']
         self.selected_file = ""
         self.pre_process_all_files()
+        self.pre_process_all_tags()
 
         # analysis TAB
         self.ui.btn_search.clicked.connect(self.tab_search_results)
@@ -170,6 +171,9 @@ class MainController(QtWidgets.QMainWindow):
 
     def pre_process_all_files(self):
         la.pre_process_all_files()
+
+    def pre_process_all_tags(self):
+        la.pre_proccess_all_tags()
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # COMPARE TAB # # # # # # # # # # # # # # # # # # # # # # # # # #
     def select_sources_compare(self, index):

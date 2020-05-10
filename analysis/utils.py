@@ -3,6 +3,7 @@ import math
 import os
 
 import collections
+import unidecode
 import pandas as pd
 from nltk import RegexpTokenizer, FreqDist
 from nltk.stem.snowball import SnowballStemmer
@@ -23,6 +24,20 @@ def generate_tags_from_text(text, n=5):
     res = ([y(x[0]) for x in cnt.most_common() if y(x[0])])  # apply lambda function and discard None values
 
     return res[:n]
+
+
+def pre_process_tags(path):
+    js = jsutils.read_json(path)
+    if js['processed_tags'] is None:
+        p_tags = []
+        for tag in js['tags']:
+            p_tags.append(unidecode.unidecode(tag.lower()))
+        p_tags.extend(generate_tags_from_text(js['content']))
+        js['processed_tags'] = p_tags
+
+        with open(path, 'w') as f:
+            json.dump(js, f, indent=4, ensure_ascii=False)
+            f.close()
 
 
 def pre_processing(data):
@@ -64,6 +79,14 @@ def pre_process_all_files():
             for file in os.listdir(dir_path):
                 filepath = dir_path + file
                 pre_process_file(filepath)
+
+def pre_proccess_all_tags():
+    for source in ['20Minutos', 'elMundo', 'elPais']:
+        for category in ['ciencia', 'salud', 'tecnologia']:
+            dir_path = './data/' + source + '/' + category + '/'
+            for file in os.listdir(dir_path):
+                filepath = dir_path + file
+                pre_process_tags(filepath)
 
 
 def compute_tf(processed_tokens):
