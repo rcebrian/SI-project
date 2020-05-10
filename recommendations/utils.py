@@ -15,7 +15,7 @@ def similarity(tag_doc1, tag_doc2):
         return num / den
 
 
-def all_sim(article, sources, categories):
+def all_sim(article, sources, categories, user_filter=0.1):
     df = pd.DataFrame(columns=['file', 'title', 'similarity', 'percent'])
 
     article_title, article_tags = jsutils.read_title_tags(article)
@@ -28,7 +28,7 @@ def all_sim(article, sources, categories):
                 if filepath != article:  # no hacer la compracion con el mismo
                     title, tags = jsutils.read_title_tags(filepath)
                     sim = similarity(article_tags, tags)
-                    if sim >= 0.10:
+                    if sim >= user_filter:
                         percent = str(round(sim * 100, 2))
                         df.loc[-1] = [filepath, title, sim, percent]
                         df.index = df.index + 1

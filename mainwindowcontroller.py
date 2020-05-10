@@ -266,13 +266,24 @@ class MainController(QtWidgets.QMainWindow):
         self.selected_file = './data/' + str(self.ui.table_reco_ref_articles.currentItem().text()) + '.json'
         self.write_article(self.ui.tx_reco_preview, self.selected_file)
 
-        self.df_recom = recom.all_sim(self.selected_file, self.SOURCES, self.CATEGORIES)
-        rows = len(self.df_recom)
-        self.ui.table_reco_ref_rank.setRowCount(rows)
-        self.ui.table_reco_ref_rank.setColumnCount(1)
-        for row in range(rows):
-            item = QTableWidgetItem(str(self.df_recom['percent'][row]) + ' % - ' + self.df_recom['title'][row])
-            self.ui.table_reco_ref_rank.setItem(row, 0, item)
+        user_filter = -1.0
+
+        try:
+            user_filter = float(self.ui.sim_percent.text())
+        except:
+            self.create_alert_window("Warning", "Similarity must be numeric")
+
+        if user_filter < 0 or user_filter > 100:
+            self.create_alert_window("Error", "The value isn't in [0, 100] range")
+        else:
+            user_filter = user_filter / 100
+            self.df_recom = recom.all_sim(self.selected_file, self.SOURCES, self.CATEGORIES, user_filter)
+            rows = len(self.df_recom)
+            self.ui.table_reco_ref_rank.setRowCount(rows)
+            self.ui.table_reco_ref_rank.setColumnCount(1)
+            for row in range(rows):
+                item = QTableWidgetItem(str(self.df_recom['percent'][row]) + ' % - ' + self.df_recom['title'][row])
+                self.ui.table_reco_ref_rank.setItem(row, 0, item)
 
     def write_article_reco_rank(self, index):
         self.write_article(self.ui.tx_reco_article, self.df_recom['file'][index.row()])
