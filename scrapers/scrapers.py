@@ -102,11 +102,15 @@ def scraper_elPais(categories):
                         article_author = soup_article.find('div',
                                                            {'class': ['a_auts', 'autor-texto']}).get_text().strip()
                     except:
-                        article_author = None  # publi (example: https://elpais.com/tecnologia/2020/03/09/actualidad/1583773553_899599.html)
+                        article_author = "PUBLICIDAD"  # publi (example: https://elpais.com/tecnologia/2020/03/09/actualidad/1583773553_899599.html)
+
+                    try:
+                        soup_subtitle = soup_article.find('h2', {'class': ['a_st', 'articulo-subtitulo']}).get_text()
+                    except:
+                        soup_subtitle = None
 
                     article_content = ""
-                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p',
-                                                                                                                   recursive=False):
+                    for p_tag in soup_article.find('div', {'class': ['article_body', 'articulo-cuerpo']}).find_all('p', recursive=False):
                         article_content += p_tag.get_text() + "\n"
 
                     for tag in soup_article.find_all('meta', property='article:tag'):
@@ -117,7 +121,7 @@ def scraper_elPais(categories):
 
                     article_json = {
                         'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text().strip(),
-                        'subtitle': soup_article.find('h2', {'class': ['a_st', 'articulo-subtitulo']}).get_text(),
+                        'subtitle': soup_subtitle,
                         'author': article_author,
                         'date': article_date,
                         'time': article_time,

@@ -852,7 +852,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QTextEdit" name="tx_compare_preview"/>
+            <widget class="QTextEdit" name="tx_compare_preview">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -1102,7 +1106,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QTextEdit" name="tx_compare_article"/>
+            <widget class="QTextEdit" name="tx_compare_article">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -1326,7 +1334,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QTextEdit" name="tx_reco_preview"/>
+            <widget class="QTextEdit" name="tx_reco_preview">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -1416,7 +1428,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QTextEdit" name="tx_reco_article"/>
+            <widget class="QTextEdit" name="tx_reco_article">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
