@@ -45,7 +45,9 @@ def scraper_elMundo(categories):
                         tg = tag.get_text()
                         tags.append(tg)
                         processed_tags.append(unidecode.unidecode(tg.lower()))
-                    processed_tags.extend(anlz.generate_tags_from_text(article_content))
+                    for p_tag in anlz.generate_tags_from_text(article_content):
+                        if p_tag not in processed_tags:
+                            processed_tags.extend(p_tag)
 
                     article_json = {
                         'title': soup_article.find('h1').get_text().strip(),
@@ -117,7 +119,9 @@ def scraper_elPais(categories):
                         tg = tag['content']
                         tags.append(tg)
                         processed_tags.append(unidecode.unidecode(tg.lower()))
-                    processed_tags.extend(anlz.generate_tags_from_text(article_content))
+                    for p_tag in anlz.generate_tags_from_text(article_content):
+                        if p_tag not in processed_tags:
+                            processed_tags.extend(p_tag)
 
                     article_json = {
                         'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text().strip(),
@@ -190,7 +194,9 @@ def scraper_20minutos(categories):
                     for p_tag in content.find_all('p', class_='paragraph', recursive=False):
                         article_content += p_tag.get_text() + "\n"
 
-                    processed_tags.extend(anlz.generate_tags_from_text(article_content))
+                    for p_tag in anlz.generate_tags_from_text(article_content):
+                        if p_tag not in processed_tags:
+                            processed_tags.extend(p_tag)
 
                     article_json = {
                         'title': soup_article.find('h1').get_text().strip(),

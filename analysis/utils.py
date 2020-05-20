@@ -32,7 +32,9 @@ def pre_process_tags(path):
         p_tags = []
         for tag in js['tags']:
             p_tags.append(unidecode.unidecode(tag.lower()))
-        p_tags.extend(generate_tags_from_text(js['content']))
+        for p_tag in generate_tags_from_text(js['content']):
+            if p_tag not in p_tags:
+                p_tags.append(p_tag)
         js['processed_tags'] = p_tags
 
         with open(path, 'w') as f:
