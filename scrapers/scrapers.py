@@ -47,7 +47,7 @@ def scraper_elMundo(categories):
                         processed_tags.append(unidecode.unidecode(tg.lower()))
                     for p_tag in anlz.generate_tags_from_text(article_content):
                         if p_tag not in processed_tags:
-                            processed_tags.extend(p_tag)
+                            processed_tags.append(p_tag)
 
                     article_json = {
                         'title': soup_article.find('h1').get_text().strip(),
@@ -121,7 +121,7 @@ def scraper_elPais(categories):
                         processed_tags.append(unidecode.unidecode(tg.lower()))
                     for p_tag in anlz.generate_tags_from_text(article_content):
                         if p_tag not in processed_tags:
-                            processed_tags.extend(p_tag)
+                            processed_tags.append(p_tag)
 
                     article_json = {
                         'title': soup_article.find('h1', {'class': ['a_t', 'articulo-titulo']}).get_text().strip(),
@@ -196,7 +196,7 @@ def scraper_20minutos(categories):
 
                     for p_tag in anlz.generate_tags_from_text(article_content):
                         if p_tag not in processed_tags:
-                            processed_tags.extend(p_tag)
+                            processed_tags.append(p_tag)
 
                     article_json = {
                         'title': soup_article.find('h1').get_text().strip(),
