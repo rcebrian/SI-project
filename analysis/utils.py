@@ -48,14 +48,15 @@ def pre_processing(data):
     # apply stop words list
     tokens = []
     for token in text:
-        if token not in ES_STOPWORDS and not token.isnumeric():
+        if token not in ES_STOPWORDS and token not in tokens and not token.isnumeric():
             tokens.append(token)
 
     # apply stemmer
     stemmer = SnowballStemmer('spanish')
     stemmed_tokens = []
     for token in tokens:
-        stemmed_tokens.append(stemmer.stem(token))
+        if token not in stemmed_tokens:
+            stemmed_tokens.append(stemmer.stem(token))
 
     return stemmed_tokens
 
