@@ -1,4 +1,4 @@
-# PRCBackend
+# PROJECT: SISTEMAS INTELIGENTES
 ## Description
 Repository for the individual project of the subject 'SISTEMAS INTELIGENTES'
 ## Configuration
